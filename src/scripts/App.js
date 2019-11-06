@@ -1,4 +1,8 @@
 import { routes, push } from '../services/router';
+import TdLibController from '../controllers/TdLibController.js';
+
+TdLibController.init();
+TdLibController.sendTdParameters();
 
 const template = document.createElement('template');
 

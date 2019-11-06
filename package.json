@@ -48,6 +48,7 @@
   },
   "dependencies": {
     "@babel/polyfill": "^7.6.0",
-    "core-js": "^3.3.4"
+    "core-js": "^3.3.4",
+    "tdweb": "^1.5.0"
   }
 }

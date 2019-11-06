@@ -110,11 +110,14 @@ class TdLibController {
 
 const TdLibCtrl = new TdLibController();
 
-TdLibCtrl.init();
-TdLibCtrl.sendTdParameters();
-// Needed for correct another request
-TdLibController.send({
-  '@type': 'checkDatabaseEncryptionKey'
-})
+(function(){
+  TdLibCtrl.init();
+  TdLibCtrl.sendTdParameters();
+  // Needed for correct another request
+  TdLibCtrl.send({
+    '@type': 'checkDatabaseEncryptionKey'
+  })
+})();
+
 
 export default TdLibCtrl;

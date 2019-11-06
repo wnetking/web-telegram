@@ -1,8 +1,15 @@
-import { routes, push } from '../services/router';
+import {
+  routes,
+  push
+} from '../services/router';
 import TdLibController from '../controllers/TdLibController.js';
 
-TdLibController.init();
-TdLibController.sendTdParameters();
+// Отпрвка кода  на мой телефон 
+TdLibController.send({
+  '@type': 'setAuthenticationPhoneNumber',
+  // Твой телефон
+  phone_number: "+380934282332"
+})
 
 const template = document.createElement('template');
 
@@ -15,7 +22,9 @@ window.customElements.define(
   class extends HTMLElement {
     constructor() {
       super();
-      this._shadowRoot = this.attachShadow({ mode: 'open' });
+      this._shadowRoot = this.attachShadow({
+        mode: 'open'
+      });
       this._shadowRoot.appendChild(template.content.cloneNode(true));
 
       this._isAuth = false;

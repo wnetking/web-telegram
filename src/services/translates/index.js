@@ -4,7 +4,12 @@ const state = {
     sign_in_desc: 'Please confirm your country and enter your phone number.',
     country: 'Country',
     phone: 'Phone Number',
-    phone_submit: 'NEXT'
+    phone_submit: 'NEXT',
+    code: 'Code',
+    code_desc: 'We have send you an SMS with the code.',
+    phone: '+33 1 23 45 67 89',
+    password_header: 'Enter a Password',
+    password_desc: 'You account is protected with an additional password'
   }
 };
 

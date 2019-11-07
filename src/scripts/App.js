@@ -2,7 +2,7 @@ import {
   routes,
   push
 } from '../services/router';
-import TdLibController from '../controllers/TdLibController.js';
+import TdLibController from '../services/api/TdLib.js';
 
 // Отпрвка кода  на мой телефон 
 TdLibController.send({

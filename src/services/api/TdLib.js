@@ -2,14 +2,14 @@ import TdClient from 'tdweb/dist/tdweb';
 import {
   WASM_FILE_HASH,
   WASM_FILE_NAME
-} from '../utils/constants.js';
+} from '../../utils/constants.js';
 import {
   getBrowser,
   getOSName
-} from '../utils/common.js';
-import config from '../configs/index.js';
+} from '../../utils/common.js';
+import config from '../../configs/index.js';
 
-class TdLibController {
+class TdLib {
   constructor() {
     this.parameters = {
       useTestDC: false,
@@ -108,16 +108,13 @@ class TdLibController {
   }
 }
 
-const TdLibCtrl = new TdLibController();
+const TdLibCtrl = new TdLib();
 
-(function(){
-  TdLibCtrl.init();
-  TdLibCtrl.sendTdParameters();
-  // Needed for correct another request
-  TdLibCtrl.send({
-    '@type': 'checkDatabaseEncryptionKey'
-  })
-})();
-
+TdLibCtrl.init();
+TdLibCtrl.sendTdParameters();
+// Needed for correct another request
+TdLibCtrl.send({
+  '@type': 'checkDatabaseEncryptionKey'
+})
 
 export default TdLibCtrl;

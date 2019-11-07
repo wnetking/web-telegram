@@ -3,17 +3,25 @@ import {
   push
 } from '../services/router';
 import TdLibController from '../services/api/TdLib.js';
+import { routes, push } from '../services/router';
+// import TdLibController from '../controllers/TdLibController.js';
 
-// Отпрвка кода  на мой телефон 
-TdLibController.send({
-  '@type': 'setAuthenticationPhoneNumber',
-  // Твой телефон
-  phone_number: "+380934282332"
-})
+// Отпрвка кода  на мой телефон
+// TdLibController.send({
+//   '@type': 'setAuthenticationPhoneNumber',
+//   // Твой телефон
+//   phone_number: "+380934282332"
+// })
 
 const template = document.createElement('template');
 
 template.innerHTML = `
+    <style>
+    app-auth-section app-input, app-auth-section button{
+      width: 100%;
+      margin-bottom: 25px;
+    }
+    </style>
     <main id="app" class="main-container">Main page</main>
 `;
 
@@ -50,8 +58,6 @@ window.customElements.define(
     }
 
     attributeChangedCallback(name, oldVal, newVal) {
-      console.log(`Attribute: ${name} changed!`);
-
       if (name === 'is-auth') {
         this.isAuth = newVal;
       }

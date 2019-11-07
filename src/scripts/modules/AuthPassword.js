@@ -6,20 +6,20 @@ const template = document.createElement('template');
 
 template.innerHTML = `
     <style>
-        app-input, button{
-          width: 100%;
-          margin-bottom: 25px;
-        }
+    app-input, button{
+      width: 100%;
+      margin-bottom: 25px;
+    }
     </style>
-    <app-auth-section heading="${t.sign_in}" desc="${t.sign_in_desc}" img-src="./public/images/telegram.svg" >
-      <app-input type="text" label="${t.country}" value="test" has-error error-message="error"></app-input>
-      <app-input type="tel" label="${t.phone}" pattern="^(?:\(\d{3}\)|\d{3})[- ]?\d{3}[- ]?\d{4}$"></app-input>
+    <app-auth-section heading="${t.password_header}" desc="${t.password_desc}" img-src="./public/images/TwoFactorSetupMonkeyClose.tgs">
+      <app-input type="text" label="${t.password}"></app-input>
+              
       <button is="app-button">${t.phone_submit}</button>
     </app-auth-section>
 `;
 
 window.customElements.define(
-  'app-auth',
+  'app-auth-password',
   class extends HTMLElement {
     constructor() {
       super();
@@ -29,8 +29,19 @@ window.customElements.define(
       this.$submitButton.addEventListener('click', this._auth.bind(this));
     }
 
+    connectedCallback() {
+      const section = this._shadowRoot.querySelector('app-auth-section');
+      const player = section.player;
+
+      if (player) {
+        setTimeout(() => {
+          player.pause();
+        }, 1000);
+      }
+    }
+
     _auth() {
-      push('/#/code-confirm');
+      push('/#/chat');
     }
   }
 );

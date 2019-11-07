@@ -6,56 +6,16 @@ const template = document.createElement('template');
 
 template.innerHTML = `
     <style>
-        :host {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .section{
-          max-width: 355px;
-        }
-
-        .tc {
-          text-align: center;
-        }
-
-        .main-logo{
-          max-width: 160px;
-          margin-top: 108px;
-          margin-bottom: 17px;
-        }
-
-        h2 {
-          margin-bottom: 17px;
-          font-size: 30px;
-        }
-
-        p {
-          margin-bottom: 50px;
-          padding: 0 55px;
-          color: #b9bbbd;
-          font-size: 15px;
-          line-height: 20px;
-        }
-
         app-input, button{
           width: 100%;
           margin-bottom: 25px;
         }
     </style>
-      <section class="section tc">
-        <img width="160" height="160" src='./public/images/telegram.svg' class="main-logo" alt="main logo"/>
-        <h2>${t.sign_in}</h2>
-        <p>${t.sign_in_desc}</p>
-        <div>
-        <app-input type="text" label="${t.country}"></app-input>
-        
-        <app-input type="tel" label="${t.phone}" pattern="^(?:\(\d{3}\)|\d{3})[- ]?\d{3}[- ]?\d{4}$"></app-input>
-        
-        <button is="app-button">${t.phone_submit}</button>
-        </div>
-      </section>
+    <app-auth-section heading="${t.sign_in}" desc="${t.sign_in_desc}" img-src="./public/images/telegram.svg" >
+      <app-input type="text" label="${t.country}" value="test" has-error error-message="error"></app-input>
+      <app-input type="tel" label="${t.phone}" pattern="^(?:\(\d{3}\)|\d{3})[- ]?\d{3}[- ]?\d{4}$"></app-input>
+      <button is="app-button">${t.phone_submit}</button>
+    </app-auth-section>
 `;
 
 window.customElements.define(

@@ -1,6 +1,9 @@
+import '@lottiefiles/lottie-player/dist/tgs-player.js';
 import '../styles/index.scss';
 import './common/Input';
+import './modules/AuthSection';
 import './common/Button';
 import './modules/Auth';
 import './modules/AuthConfirmCode';
+import './modules/AuthPassword';
 import './App';

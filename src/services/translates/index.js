@@ -7,9 +7,9 @@ const state = {
     phone_submit: 'NEXT',
     code: 'Code',
     code_desc: 'We have send you an SMS with the code.',
-    phone: '+33 1 23 45 67 89',
     password_header: 'Enter a Password',
-    password_desc: 'You account is protected with an additional password'
+    password_desc: 'You account is protected with an additional password',
+    password: 'Password'
   }
 };
 

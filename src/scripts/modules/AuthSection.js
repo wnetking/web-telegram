@@ -1,5 +1,4 @@
 import { trans } from '../../services';
-import { push } from '../../services/router';
 const t = trans('auth');
 
 const template = document.createElement('template');
@@ -21,14 +20,18 @@ template.innerHTML = `
         }
 
         .main-logo{
-          max-width: 160px;
+          width: 160px;
+          height: 160px;
           margin-top: 108px;
           margin-bottom: 17px;
+          margin-left: auto;
+          margin-right: auto;
         }
 
         h2 {
           margin-bottom: 17px;
           font-size: 30px;
+          user-select: none;
         }
 
         p {
@@ -37,6 +40,7 @@ template.innerHTML = `
           color: #b9bbbd;
           font-size: 15px;
           line-height: 20px;
+          user-select: none;
         }
 
         app-input, button{
@@ -45,48 +49,72 @@ template.innerHTML = `
         }
     </style>
       <section class="section tc">
-        <img width="160" height="160" src='./public/images/telegram.svg' class="main-logo" alt="main logo"/>
-        <h2>${t.sign_in}</h2>
-        <p>${t.sign_in_desc}</p>
+        <h2></h2>
+        <p></p>
         <div>
-        <app-input type="text" label="${t.country}"></app-input>
-        
-        <app-input type="tel" label="${t.phone}" pattern="^(?:\(\d{3}\)|\d{3})[- ]?\d{3}[- ]?\d{4}$"></app-input>
-        
-        <button is="app-button">${t.phone_submit}</button>
+          <slot></slot>
         </div>
       </section>
 `;
 
 window.customElements.define(
-  'app-auth',
+  'app-auth-section',
   class extends HTMLElement {
     constructor() {
       super();
       this._shadowRoot = this.attachShadow({ mode: 'open' });
       this._shadowRoot.appendChild(template.content.cloneNode(true));
-      this.$submitButton = this._shadowRoot.querySelector('button');
-      this.$submitButton.addEventListener('click', this._auth.bind(this));
+      this.$heading = this._shadowRoot.querySelector('h2');
+      this.$section = this._shadowRoot.querySelector('section');
+      this.$desc = this._shadowRoot.querySelector('p');
+      this.isAminatedSticker = false;
 
-      if (this.hasAttribute('label')) {
-        this.$label.innerHTML = this.getAttribute('label');
+      if (this.hasAttribute('heading')) {
+        this.$heading.innerHTML = this.getAttribute('heading');
+      }
+
+      if (this.hasAttribute('desc')) {
+        this.$desc.innerHTML = this.getAttribute('desc');
+      }
+
+      if (this.hasAttribute('img-src')) {
+        const src = this.getAttribute('img-src');
+        this.isAminatedSticker = src.indexOf('.tgs') !== -1;
+        this.$section.insertAdjacentHTML(
+          'afterbegin',
+          this.getImageTemplate(src)
+        );
       }
     }
 
-    _auth() {
-      push('/#/code-confirm');
+    getImageTemplate(src) {
+      if (this.isAminatedSticker) {
+        return `
+        <tgs-player
+          width="160" height="160"
+          class="main-logo"
+          autoplay
+          mode="bounce"
+          direction='2'
+          src="${src}"
+        >
+        </tgs-player>
+      `;
+      }
+
+      return `<img src="${src}" alt="image" width="160" height="160" class="main-logo"/>`;
+    }
+
+    connectedCallback() {
+      if (this.isAminatedSticker) {
+        this.player = this._shadowRoot.querySelector('tgs-player');
+      }
     }
 
     static get observedAttributes() {
-      return ['heading', 'description'];
+      return ['heading', 'desc', 'img-src'];
     }
 
-    attributeChangedCallback(name, oldVal, newVal) {
-      console.log(`Attribute: ${name} changed!`);
-
-      if (name === 'is-auth') {
-        this.isAuth = newVal;
-      }
-    }
+    attributeChangedCallback(name, oldVal, newVal) {}
   }
 );

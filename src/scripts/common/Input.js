@@ -20,27 +20,39 @@ template.innerHTML = `
           outline: none !important;
         }
 
+        input.has-error{
+          border-color: #e54035;
+        }
+
+        input.has-error:focus {
+          border: 1px solid #e54035;
+          box-shadow: 0 0 0 1px #e54035;
+        }
+
         input:focus {
           border: 1px solid #4da3f6;
-          box-shadow: 0 0 2px #4da3f6;
+          box-shadow: 0 0 0 1px #4da3f6;
         }
         
         label {
           position:absolute;
           top: 50%;
-          left: 18px;
+          left: 20px;
           transform: translateY(-50%);
-          transition: all 0.3s ease; 
+          transition: all 0.1s ease-out; 
           color: #b0b9c0;
           background-color:#fff;
         }
 
-        input:focus + label {
+        input.with-value + label {
           font-size: 12px;
           top: 0px;
           transform: translateY(-50%);
           padding: 0 5px;
           color: #4da3f6;
+        }
+        input.with-value.has-error + label {
+          color: #e54035;
         }
     </style>
     <div class="input-wrap">
@@ -61,6 +73,17 @@ window.customElements.define(
       this.$label = this._shadowRoot.querySelector('label');
 
       this.customAttr = ['label'];
+      this.value = this.hasAttribute('value') ? this.getAttribute('value') : '';
+
+      if (this.value) {
+        this.$input.classList.add('with-value');
+      }
+
+      if (this.hasAttribute('label')) {
+        this.$label.innerHTML = this.getAttribute('label');
+      }
+
+      this.setErrorState();
     }
 
     connectedCallback() {
@@ -76,8 +99,54 @@ window.customElements.define(
         }
       });
 
-      if (this.hasAttribute('label')) {
-        this.$label.innerHTML = this.getAttribute('label');
+      this.$input.addEventListener('keyup', e => {
+        const value = e.target.value;
+
+        if (value) {
+          this.$input.classList.add('with-value');
+        } else {
+          this.$input.classList.remove('with-value');
+          this.resetErrorState();
+        }
+
+        var event = new KeyboardEvent('keyup', e);
+        this.dispatchEvent(event);
+      });
+
+      this.$input.addEventListener('change', e => {
+        var event = new CustomEvent('change', {
+          detail: { value: e.target.value, target: e.target }
+        });
+        this.dispatchEvent(event);
+      });
+    }
+
+    setErrorState() {
+      if (this.hasAttribute('has-error')) {
+        this.$input.classList.add('has-error');
+
+        if (this.hasAttribute('error-message')) {
+          this.$label.innerHTML = this.getAttribute('error-message');
+        }
+      }
+    }
+
+    resetErrorState() {
+      this.$input.classList.remove('has-error');
+      this.$label.innerHTML = this.getAttribute('label');
+    }
+
+    static get observedAttributes() {
+      return ['has-error'];
+    }
+
+    attributeChangedCallback(name, oldVal, newVal) {
+      if (name === 'has-error' && newVal === true) {
+        this.setErrorState();
+      }
+
+      if (name === 'has-error' && newVal === false) {
+        this.resetErrorState();
       }
     }
   }

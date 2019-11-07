@@ -12,7 +12,7 @@ template.innerHTML = `
     }
     </style>
     <app-auth-section heading="${t.password_header}" desc="${t.password_desc}" img-src="./public/images/TwoFactorSetupMonkeyClose.tgs">
-      <app-input type="text" label="${t.password}"></app-input>
+      <app-input type="password" label="${t.password}"></app-input>
               
       <button is="app-button">${t.phone_submit}</button>
     </app-auth-section>
@@ -27,16 +27,49 @@ window.customElements.define(
       this._shadowRoot.appendChild(template.content.cloneNode(true));
       this.$submitButton = this._shadowRoot.querySelector('button');
       this.$submitButton.addEventListener('click', this._auth.bind(this));
+
+      this.$input = this._shadowRoot.querySelector('app-input');
+      this.$input.addEventListener('focusout', this.inputFocusOut.bind(this));
+      this.$input.addEventListener(
+        'toggle-password',
+        this.inputFocus.bind(this)
+      );
     }
 
     connectedCallback() {
-      const section = this._shadowRoot.querySelector('app-auth-section');
-      const player = section.player;
+      this.section = this._shadowRoot.querySelector('app-auth-section');
+      this.player = this.section.player;
 
-      if (player) {
+      if (this.player) {
+        this.pause();
+      }
+    }
+
+    pause() {
+      setTimeout(() => {
+        this.player.pause();
+      }, 1000);
+    }
+
+    inputFocus(e) {
+      console.log(e);
+      const stikerPath = './public/images/TwoFactorSetupMonkeyPeek.tgs';
+
+      if (this.player) {
+        this.player.load(stikerPath);
         setTimeout(() => {
-          player.pause();
-        }, 1000);
+          this.player.pause();
+        }, 400);
+        // this.player.setLooping(true);
+      }
+    }
+
+    inputFocusOut(e) {
+      if (this.player) {
+        this.player.play();
+        // this.player.load(this.section.getAttribute('img-src'));
+        // this.player.setLooping(false);
+        // this.pause();
       }
     }
 

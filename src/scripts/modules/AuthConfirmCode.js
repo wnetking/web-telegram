@@ -24,11 +24,36 @@ window.customElements.define(
       this._shadowRoot = this.attachShadow({ mode: 'open' });
       this._shadowRoot.appendChild(template.content.cloneNode(true));
       this.$input = this._shadowRoot.querySelector('app-input');
+
+      this.$input.addEventListener('focusout', this.inputFocusOut.bind(this));
+      this.$input.addEventListener('focus', this.inputFocus.bind(this));
+
       this.$input.addEventListener('keydown', e => {
         if (e.code === 'Enter') {
           push('/#/password');
         }
       });
+    }
+
+    connectedCallback() {
+      this.section = this._shadowRoot.querySelector('app-auth-section');
+      this.player = this.section.player;
+    }
+
+    inputFocus(e) {
+      const stikerPath = './public/images/TwoFactorSetupMonkeyTracking.tgs';
+
+      if (this.player) {
+        this.player.load(stikerPath);
+        this.player.setLooping(true);
+      }
+    }
+
+    inputFocusOut(e) {
+      if (this.player) {
+        this.player.load(this.section.getAttribute('img-src'));
+        this.player.setLooping(false);
+      }
     }
 
     _auth() {}

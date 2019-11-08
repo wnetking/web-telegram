@@ -31,7 +31,6 @@ window.customElements.define(
       this.appendChild(template.content.cloneNode(true));
 
       this._isAuth = false;
-      console.log(this);
       this.$app = document.getElementById('app');
     }
 

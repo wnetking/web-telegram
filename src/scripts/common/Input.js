@@ -54,8 +54,15 @@ template.innerHTML = `
         button{
           position:absolute;
           top: 50%;
-          right: 20px;
+          right: 10px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
           transform: translateY(-50%);
+          background: transparent;
+          border: none;
+          font-size:23px;
+          outline: none;  
         }
         input.with-value.has-error + label {
           color: #e54035;
@@ -93,48 +100,75 @@ window.customElements.define(
       this.setErrorState();
     }
 
-    connectedCallback() {
-      if (!this.attributes.length) {
-        return;
+    static get observedAttributes() {
+      return ['has-error'];
+    }
+
+    attributeChangedCallback(name, oldVal, newVal) {
+      if (name === 'has-error' && newVal === true) {
+        this.setErrorState();
       }
 
+      if (name === 'has-error' && newVal === false) {
+        this.resetErrorState();
+      }
+    }
+
+    connectedCallback() {
       const attributes = Object.values(this.attributes);
 
-      attributes.forEach(attr => {
-        if (!this.customAttr.includes(attr.name)) {
-          this.$input.setAttribute(attr.name, attr.value);
-        }
-      });
-
-      if (this.getAttribute('type') === 'password') {
-        const button = document.createElement('button');
-        const icon = document.createElement('app-icon');
-        icon.setAttribute('icon', 'крестик');
-        button.appendChild(icon);
-        button.addEventListener('click', this.togglePasswordType.bind(this));
-        this.$inputWrap.appendChild(button);
+      if (attributes.length) {
+        attributes.forEach(attr => {
+          if (!this.customAttr.includes(attr.name)) {
+            this.$input.setAttribute(attr.name, attr.value);
+          }
+        });
       }
 
-      this.$input.addEventListener('keyup', e => {
-        const value = e.target.value;
+      if (this.getAttribute('type') === 'password') {
+        this.typePasswordRendered();
+      }
 
-        if (value) {
-          this.$input.classList.add('with-value');
-        } else {
-          this.$input.classList.remove('with-value');
-          this.resetErrorState();
-        }
+      this.$input.addEventListener('keyup', this.keyupHandler.bind(this));
+      this.$input.addEventListener('change', this.changeHandler.bind(this));
+    }
 
-        var event = new KeyboardEvent('keyup', e);
-        this.dispatchEvent(event);
+    typePasswordRendered() {
+      const button = document.createElement('button');
+      this.icon = document.createElement('app-icon');
+      this.icon.setAttribute('icon', 'eye1_svg');
+      button.appendChild(this.icon);
+      button.addEventListener('click', this.togglePasswordType.bind(this));
+      this.$inputWrap.appendChild(button);
+    }
+
+    /**
+     * @description
+     * @param {object} e
+     */
+    keyupHandler(e) {
+      const value = e.target.value;
+
+      if (value) {
+        this.$input.classList.add('with-value');
+      } else {
+        this.$input.classList.remove('with-value');
+        this.resetErrorState();
+      }
+
+      var event = new KeyboardEvent('keyup', e);
+      this.dispatchEvent(event);
+    }
+
+    /**
+     * @description
+     * @param {object} e
+     */
+    changeHandler(e) {
+      const event = new CustomEvent('change', {
+        detail: { value: e.target.value, target: e.target }
       });
-
-      this.$input.addEventListener('change', e => {
-        var event = new CustomEvent('change', {
-          detail: { value: e.target.value, target: e.target }
-        });
-        this.dispatchEvent(event);
-      });
+      this.dispatchEvent(event);
     }
 
     togglePasswordType(e) {
@@ -142,8 +176,10 @@ window.customElements.define(
 
       if (needShowPassword) {
         this.$input.setAttribute('type', 'text');
+        this.icon.setAttribute('icon', 'eye2_svg');
       } else {
         this.$input.setAttribute('type', 'password');
+        this.icon.setAttribute('icon', 'eye1_svg');
       }
 
       const event = new CustomEvent('toggle-password', {
@@ -165,20 +201,6 @@ window.customElements.define(
     resetErrorState() {
       this.$input.classList.remove('has-error');
       this.$label.innerHTML = this.getAttribute('label');
-    }
-
-    static get observedAttributes() {
-      return ['has-error'];
-    }
-
-    attributeChangedCallback(name, oldVal, newVal) {
-      if (name === 'has-error' && newVal === true) {
-        this.setErrorState();
-      }
-
-      if (name === 'has-error' && newVal === false) {
-        this.resetErrorState();
-      }
     }
   }
 );

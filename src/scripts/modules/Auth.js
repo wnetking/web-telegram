@@ -6,7 +6,7 @@ const template = document.createElement('template');
 
 template.innerHTML = `
     <style>
-        app-input, button{
+        app-input, app-button{
           width: 100%;
           margin-bottom: 25px;
         }
@@ -14,7 +14,7 @@ template.innerHTML = `
     <app-auth-section heading="${t.sign_in}" desc="${t.sign_in_desc}" img-src="./public/images/telegram.svg" >
       <app-input type="text" label="${t.country}" value="test" has-error error-message="error"></app-input>
       <app-input type="tel" label="${t.phone}" pattern="^(?:\(\d{3}\)|\d{3})[- ]?\d{3}[- ]?\d{4}$"></app-input>
-      <button is="app-button">${t.phone_submit}</button>
+      <app-button>${t.phone_submit}</app-button>
     </app-auth-section>
 `;
 
@@ -25,12 +25,12 @@ window.customElements.define(
       super();
       this._shadowRoot = this.attachShadow({ mode: 'open' });
       this._shadowRoot.appendChild(template.content.cloneNode(true));
-      this.$submitButton = this._shadowRoot.querySelector('button');
+      this.$submitButton = this._shadowRoot.querySelector('app-button');
       this.$submitButton.addEventListener('click', this._auth.bind(this));
     }
 
     _auth() {
-      push('/#/code-confirm');
+      // push('/#/code-confirm');
     }
   }
 );

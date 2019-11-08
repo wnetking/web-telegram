@@ -1,4 +1,7 @@
 const state = {
+  core: {
+    loading: 'Please Wait...'
+  },
   auth: {
     sign_in: 'Sign in to Telegram',
     sign_in_desc: 'Please confirm your country and enter your phone number.',

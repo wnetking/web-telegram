@@ -1,9 +1,13 @@
-import main from './main.js';
+import auth from './auth.js';
 
-function combineReducers(){
-  return {
-    main,
-  }
+function combineReducers(update){
+  const reducers = [
+    auth
+  ]
+
+  reducers.forEach(reducer => {
+    reducer(update)
+  })
 }
 
 export default combineReducers;

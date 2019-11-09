@@ -43,7 +43,7 @@ window.customElements.define(
       api.send({
         '@type': 'checkAuthenticationCode',
         code: value,
-      }).then(() => push('#/chat'))
+      })
     }
 
     connectedCallback() {

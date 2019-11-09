@@ -2,7 +2,7 @@ import {
   push
 } from '../router'
 
-function checkMainState(update) {
+function chechAuthState(update) {
 
   console.log(update);
 
@@ -19,8 +19,10 @@ function checkMainState(update) {
         case "authorizationStateClosed":
           push('#/auth');
           break;
+        case "authorizationStateWaitCode":
+          push('#/code-confirm');
+          break;
       }
-
       break;
 
     default:
@@ -30,4 +32,4 @@ function checkMainState(update) {
 }
 
 
-export default checkMainState;
+export default chechAuthState;

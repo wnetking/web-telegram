@@ -52,12 +52,7 @@ window.customElements.define(
     sendPhoneHandle() {
       api.send({
         '@type': 'setAuthenticationPhoneNumber',
-        // Твой телефон
         phone_number: this.telephone
-      }).then(resp => {
-        if(resp['@type'] == 'ok'){
-          push('/#/code-confirm');
-        }
       })
     }
   }

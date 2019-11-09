@@ -10,13 +10,11 @@ import {
 import config from '../../configs/index.js';
 import reducers from '../reducers/';
 import showError from '../../utils/errors.js';
-
-const getAllReducers = reducers(); 
-
+ 
 class TdLib {
   constructor() {
     this.parameters = {
-      useTestDC: false,
+      useTestDC: true,
       readOnly: false,
       verbosity: 1,
       jsVerbosity: 3,
@@ -58,7 +56,7 @@ class TdLib {
     this.client = new TdClient(options);
 
     this.client.onUpdate = (update) => {
-      getAllReducers['main'](update);
+      reducers(update);
     }
   }
 

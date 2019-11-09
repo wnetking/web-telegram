@@ -14,8 +14,6 @@ api.send({
   '@type': 'checkDatabaseEncryptionKey'
 });
 
-console.log('App');
-
 // Отпрвка кода  на мой телефон
 // TdLibController.send({
 //   '@type': 'setAuthenticationPhoneNumber',

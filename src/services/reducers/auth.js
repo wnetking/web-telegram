@@ -1,25 +1,21 @@
-import {
-  push
-} from '../router'
+import { push } from '../router';
 
 function chechAuthState(update) {
-
-  console.log(update);
+  // console.log(update);
 
   switch (update['@type']) {
     case 'updateAuthorizationState':
-
       switch (update.authorization_state['@type']) {
-        case "authorizationStateReady":
+        case 'authorizationStateReady':
           push('#/chat');
           break;
-        case "authorizationStateWaitPhoneNumber":
+        case 'authorizationStateWaitPhoneNumber':
           push('#/auth');
           break;
-        case "authorizationStateClosed":
+        case 'authorizationStateClosed':
           push('#/auth');
           break;
-        case "authorizationStateWaitCode":
+        case 'authorizationStateWaitCode':
           push('#/code-confirm');
           break;
       }
@@ -28,8 +24,6 @@ function chechAuthState(update) {
     default:
       break;
   }
-
 }
-
 
 export default chechAuthState;

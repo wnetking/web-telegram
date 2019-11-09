@@ -59,13 +59,13 @@ class TdLib {
    */
   send(request) {
     if (!this.disableLog) {
-      console.group();
-      console.log('send', request);
+      // console.group();
+      // console.log('send', request);
       return this.client
         .send(request)
         .then(result => {
-          console.log('receive result', result);
-          console.groupEnd();
+          // console.log('receive result', result);
+          // console.groupEnd();
           return result;
         })
         .catch(error => {

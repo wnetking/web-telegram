@@ -12,6 +12,9 @@ module.exports = merge(common, {
   },
   devServer: {
     inline: true
+    // hot: false,
+    // inline: false,
+    // liveReload: false
   },
   plugins: [
     new Webpack.DefinePlugin({

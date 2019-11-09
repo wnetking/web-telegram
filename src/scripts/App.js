@@ -1,15 +1,7 @@
-import { routes, push } from '../services/router';
-// import TdLibController from '../controllers/TdLibController.js';
-
-// Отпрвка кода  на мой телефон
-// TdLibController.send({
-//   '@type': 'setAuthenticationPhoneNumber',
-//   // Твой телефон
-//   phone_number: "+380934282332"
-// })
+import { routes, push, Router } from '../services/router';
+import store from '../services/store';
 
 const template = document.createElement('template');
-
 template.innerHTML = `
     <style>
     app-auth-section app-input, app-auth-section button{
@@ -22,28 +14,29 @@ template.innerHTML = `
 
 window.customElements.define(
   'main-app',
-  class extends HTMLElement {
+  class extends AppElement {
     constructor() {
       super();
-      // this.innerHTML = this.attachShadow({
-      //   mode: 'open'
-      // });
       this.appendChild(template.content.cloneNode(true));
 
       this._isAuth = false;
       this.$app = document.getElementById('app');
+      this.router = new Router(this.$app, routes, store);
+    }
+
+    storeUpdate(detail) {
+      console.log('Get update store', detail);
     }
 
     connectedCallback() {
-      window.addEventListener('popstate', () => {
-        const hash = window.location.hash;
-        this.render(hash);
-      });
+      this.router.init();
 
+      // Update state
+      store.test = 'test';
       if (this._isAuth) {
-        this.render('/');
+        push('/');
       } else {
-        push('/#/auth');
+        push('/#/chat');
       }
     }
 
@@ -64,13 +57,9 @@ window.customElements.define(
     set isAuth(value = false) {
       this._isAuth = value;
 
-      this.render();
+      push('/');
     }
 
-    render(path) {
-      if (routes[path]) {
-        this.$app.innerHTML = routes[path];
-      }
-    }
+    render(path) {}
   }
 );

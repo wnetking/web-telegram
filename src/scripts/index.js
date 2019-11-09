@@ -1,5 +1,6 @@
 import '@lottiefiles/lottie-player/dist/tgs-player.js';
 import '../styles/index.scss';
+import './common/Element';
 import './common/Input';
 import './common/Loader';
 import './common/Button';
@@ -8,4 +9,8 @@ import './modules/AuthSection';
 import './modules/Auth';
 import './modules/AuthConfirmCode';
 import './modules/AuthPassword';
+import './modules/Chat/ChatConainer';
+import './modules/Chat/Chat';
+import './modules/ChartRightSideBar/ChartRightSideBar';
+import './modules/ChatLeftSideBar/ChartLeftSideBar';
 import './App';

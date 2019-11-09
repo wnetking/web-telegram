@@ -1,15 +1,9 @@
 import TdClient from 'tdweb/dist/tdweb';
-import {
-  WASM_FILE_HASH,
-  WASM_FILE_NAME
-} from '../utils/constants.js';
-import {
-  getBrowser,
-  getOSName
-} from '../utils/common.js';
-import config from '../configs/index.js';
+import { WASM_FILE_HASH, WASM_FILE_NAME } from '../../utils/constants.js';
+import { getBrowser, getOSName } from '../../utils/common.js';
+import config from '../../configs/index.js';
 
-class TdLibController {
+class TdLib {
   constructor() {
     this.parameters = {
       useTestDC: false,
@@ -59,15 +53,18 @@ class TdLibController {
    */
   send(request) {
     if (!this.disableLog) {
+      console.group();
       console.log('send', request);
       return this.client
         .send(request)
         .then(result => {
           console.log('receive result', result);
+          console.groupEnd();
           return result;
         })
         .catch(error => {
           console.error('catch error', error);
+          console.groupEnd();
 
           throw error;
         });
@@ -77,14 +74,9 @@ class TdLibController {
   }
 
   sendTdParameters() {
-    const {
-      api_id,
-      api_hash
-    } = config;
+    const { api_id, api_hash } = config;
 
-    const {
-      useTestDC
-    } = this.parameters;
+    const { useTestDC } = this.parameters;
 
     this.send({
       '@type': 'setTdlibParameters',
@@ -104,20 +96,16 @@ class TdLibController {
         files_directory: '/'
       }
     });
-
   }
 }
 
-const TdLibCtrl = new TdLibController();
+const TdLibCtrl = new TdLib();
 
-(function(){
-  TdLibCtrl.init();
-  TdLibCtrl.sendTdParameters();
-  // Needed for correct another request
-  TdLibCtrl.send({
-    '@type': 'checkDatabaseEncryptionKey'
-  })
-})();
-
+TdLibCtrl.init();
+TdLibCtrl.sendTdParameters();
+// Needed for correct another request
+TdLibCtrl.send({
+  '@type': 'checkDatabaseEncryptionKey'
+});
 
 export default TdLibCtrl;

@@ -1,19 +1,24 @@
-import { trans } from '../../services';
-import { push } from '../../services/router';
-const t = trans('auth');
-
 const template = document.createElement('template');
 
 template.innerHTML = `
     <style>
+    :host {
+      position: relative;
+    }
 
+    app-loader{
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+    }
     </style>
-
+    <div><app-loader big></app-loader></div>
 `;
 
 window.customElements.define(
-  'app-chat-container',
-  class extends HTMLElement {
+  'app-chat-left-sidebar',
+  class extends AppElement {
     constructor() {
       super();
       this._shadowRoot = this.attachShadow({ mode: 'open' });

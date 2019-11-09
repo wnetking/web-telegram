@@ -85,6 +85,8 @@ window.customElements.define(
           this.getImageTemplate(src)
         );
       }
+
+      this.player = this._shadowRoot.querySelector('tgs-player');
     }
 
     getImageTemplate(src) {

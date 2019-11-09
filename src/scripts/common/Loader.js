@@ -20,6 +20,14 @@ template.innerHTML = `
       animation: loadingspin 1s linear infinite;
     }
     
+    span.big{
+      width: 40px;
+      height: 40px;
+      border-color: #4da3f6;
+      border-top-color: transparent;
+      border-width: 3px;
+    }
+    
     @keyframes loadingspin {
       100% {
           transform: rotate(360deg)
@@ -36,6 +44,11 @@ window.customElements.define(
       super(); // always call super() first in the constructor.
       this._shadowRoot = this.attachShadow({ mode: 'open' });
       this._shadowRoot.appendChild(template.content.cloneNode(true));
+      this.$span = this._shadowRoot.querySelector('span');
+
+      if (this.hasAttribute('big')) {
+        this.$span.classList.add('big');
+      }
     }
   }
 );

@@ -6,7 +6,7 @@ const template = document.createElement('template');
 
 template.innerHTML = `
     <style>
-    app-input, button{
+    app-input, app-button{
       width: 100%;
       margin-bottom: 25px;
     }
@@ -14,7 +14,7 @@ template.innerHTML = `
     <app-auth-section heading="${t.password_header}" desc="${t.password_desc}" img-src="./public/images/TwoFactorSetupMonkeyClose.tgs">
       <app-input type="password" label="${t.password}"></app-input>
               
-      <button is="app-button">${t.phone_submit}</button>
+      <app-button>${t.phone_submit}</app-button>
     </app-auth-section>
 `;
 
@@ -25,7 +25,7 @@ window.customElements.define(
       super();
       this._shadowRoot = this.attachShadow({ mode: 'open' });
       this._shadowRoot.appendChild(template.content.cloneNode(true));
-      this.$submitButton = this._shadowRoot.querySelector('button');
+      this.$submitButton = this._shadowRoot.querySelector('app-button');
       this.$submitButton.addEventListener('click', this._auth.bind(this));
 
       this.$input = this._shadowRoot.querySelector('app-input');

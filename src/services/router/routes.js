@@ -1,7 +1,21 @@
-export default {
-  '/': 'chat',
-  '#/auth': '<app-auth></app-auth>',
-  '#/code-confirm': '<app-auth-code-confirm></app-auth-code-confirm>',
-  '#/password': '<app-auth-password></app-auth-password>',
-  '#/chat': '<app-chat-container>app-chat-container</app-chat-container>'
+const routes = {
+  '/': {
+    component: 'chat'
+  },
+  '#/auth': {
+    component: 'app-auth',
+    storeAttr: ['test']
+  },
+  '#/code-confirm': {
+    component: 'app-auth-code-confirm'
+  },
+
+  '#/password': {
+    component: 'app-auth-password'
+  },
+  '#/chat': {
+    component: 'app-chat-container'
+  }
 };
+
+export default routes;

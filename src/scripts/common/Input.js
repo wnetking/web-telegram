@@ -14,10 +14,11 @@ template.innerHTML = `
           box-sizing: border-box;
           display: inline-block;
           width: 100%;
-          padding: 18px;
+          padding: 17px 18px;
           border: 1px solid #e6e7ea;
           border-radius: 10px;
           outline: none !important;
+          font-size: 16px;
         }
 
         input.has-error{

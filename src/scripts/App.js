@@ -1,4 +1,20 @@
-import { routes, push } from '../services/router';
+import {
+  routes,
+  push
+} from '../services/router';
+
+import {
+  api
+} from '../services/';
+
+api.init();
+api.sendTdParameters();
+// Needed for correct another request
+api.send({
+  '@type': 'checkDatabaseEncryptionKey'
+});
+
+console.log('App');
 
 // Отпрвка кода  на мой телефон
 // TdLibController.send({

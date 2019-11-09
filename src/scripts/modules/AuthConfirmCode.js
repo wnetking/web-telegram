@@ -1,5 +1,10 @@
-import { trans } from '../../services';
-import { push } from '../../services/router';
+import {
+  trans,
+  api
+} from '../../services';
+import {
+  push
+} from '../../services/router';
 const t = trans('auth');
 
 const template = document.createElement('template');
@@ -12,7 +17,7 @@ template.innerHTML = `
         }
     </style>
     <app-auth-section heading="${t.phone}" desc="${t.code_desc}" img-src="./public/images/TwoFactorSetupMonkeyIdle.tgs" >
-      <app-input type="text" label="${t.code}"></app-input>
+      <app-input class='confirmation-code' type="text" label="${t.code}"></app-input>
     </app-auth-section>
 `;
 
@@ -21,14 +26,24 @@ window.customElements.define(
   class extends HTMLElement {
     constructor() {
       super();
-      this._shadowRoot = this.attachShadow({ mode: 'open' });
-      this._shadowRoot.appendChild(template.content.cloneNode(true));
-      this.$input = this._shadowRoot.querySelector('app-input');
-      this.$input.addEventListener('keydown', e => {
-        if (e.code === 'Enter') {
-          push('/#/password');
-        }
+      this._shadowRoot = this.attachShadow({
+        mode: 'open'
       });
+      this._shadowRoot.appendChild(template.content.cloneNode(true));
+      this.$input = this._shadowRoot.querySelector('.confirmation-code');
+      this.$input.addEventListener('change', this.onChangeInputHanlde.bind(this))
+    }
+
+    onChangeInputHanlde(e) {
+      const {
+        detail: {
+          value
+        }
+      } = e;
+      api.send({
+        '@type': 'checkAuthenticationCode',
+        code: value,
+      }).then(() => push('#/chat'))
     }
 
     _auth() {}

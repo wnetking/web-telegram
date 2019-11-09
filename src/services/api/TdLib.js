@@ -8,6 +8,9 @@ import {
   getOSName
 } from '../../utils/common.js';
 import config from '../../configs/index.js';
+import reducers from '../reducers/';
+
+const getAllReducers = reducers(); 
 
 class TdLib {
   constructor() {
@@ -52,6 +55,10 @@ class TdLib {
     };
 
     this.client = new TdClient(options);
+
+    this.client.onUpdate = (update) => {
+      getAllReducers['main'](update);
+    }
   }
 
   /**
@@ -109,12 +116,5 @@ class TdLib {
 }
 
 const TdLibCtrl = new TdLib();
-
-TdLibCtrl.init();
-TdLibCtrl.sendTdParameters();
-// Needed for correct another request
-TdLibCtrl.send({
-  '@type': 'checkDatabaseEncryptionKey'
-})
 
 export default TdLibCtrl;

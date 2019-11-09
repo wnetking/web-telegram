@@ -51,6 +51,12 @@ template.innerHTML = `
           padding: 0 5px;
           color: #4da3f6;
         }
+        button{
+          position:absolute;
+          top: 50%;
+          right: 20px;
+          transform: translateY(-50%);
+        }
         input.with-value.has-error + label {
           color: #e54035;
         }
@@ -71,6 +77,7 @@ window.customElements.define(
 
       this.$input = this._shadowRoot.querySelector('input');
       this.$label = this._shadowRoot.querySelector('label');
+      this.$inputWrap = this._shadowRoot.querySelector('.input-wrap');
 
       this.customAttr = ['label'];
       this.value = this.hasAttribute('value') ? this.getAttribute('value') : '';
@@ -99,6 +106,15 @@ window.customElements.define(
         }
       });
 
+      if (this.getAttribute('type') === 'password') {
+        const button = document.createElement('button');
+        const icon = document.createElement('app-icon');
+        icon.setAttribute('icon', 'крестик');
+        button.appendChild(icon);
+        button.addEventListener('click', this.togglePasswordType.bind(this));
+        this.$inputWrap.appendChild(button);
+      }
+
       this.$input.addEventListener('keyup', e => {
         const value = e.target.value;
 
@@ -119,6 +135,21 @@ window.customElements.define(
         });
         this.dispatchEvent(event);
       });
+    }
+
+    togglePasswordType(e) {
+      const needShowPassword = this.$input.getAttribute('type') === 'password';
+
+      if (needShowPassword) {
+        this.$input.setAttribute('type', 'text');
+      } else {
+        this.$input.setAttribute('type', 'password');
+      }
+
+      const event = new CustomEvent('toggle-password', {
+        detail: { isPasswordShow: needShowPassword }
+      });
+      this.dispatchEvent(event);
     }
 
     setErrorState() {

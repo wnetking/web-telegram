@@ -46,6 +46,27 @@ window.customElements.define(
       }).then(() => push('#/chat'))
     }
 
+    connectedCallback() {
+      this.section = this._shadowRoot.querySelector('app-auth-section');
+      this.player = this.section.player;
+    }
+
+    inputFocus(e) {
+      const stikerPath = './public/images/TwoFactorSetupMonkeyTracking.tgs';
+
+      if (this.player) {
+        this.player.load(stikerPath);
+        this.player.setLooping(true);
+      }
+    }
+
+    inputFocusOut(e) {
+      if (this.player) {
+        this.player.load(this.section.getAttribute('img-src'));
+        this.player.setLooping(false);
+      }
+    }
+
     _auth() {}
   }
 );

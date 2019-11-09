@@ -40,14 +40,14 @@ window.customElements.define(
   class extends HTMLElement {
     constructor() {
       super();
-      this._shadowRoot = this.attachShadow({
-        mode: 'open'
-      });
-      this._shadowRoot.appendChild(template.content.cloneNode(true));
+      // this.innerHTML = this.attachShadow({
+      //   mode: 'open'
+      // });
+      this.appendChild(template.content.cloneNode(true));
 
       this._isAuth = false;
-
-      this.$app = this._shadowRoot.getElementById('app');
+      console.log(this);
+      this.$app = document.getElementById('app');
     }
 
     connectedCallback() {

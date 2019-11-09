@@ -2,6 +2,8 @@ import TdClient from 'tdweb/dist/tdweb';
 import { WASM_FILE_HASH, WASM_FILE_NAME } from '../../utils/constants.js';
 import { getBrowser, getOSName } from '../../utils/common.js';
 import config from '../../configs/index.js';
+import reducers from '../reducers/';
+import showError from '../../utils/errors.js';
 
 class TdLib {
   constructor() {
@@ -46,6 +48,10 @@ class TdLib {
     };
 
     this.client = new TdClient(options);
+
+    this.client.onUpdate = update => {
+      reducers(update);
+    };
   }
 
   /**
@@ -63,9 +69,9 @@ class TdLib {
           return result;
         })
         .catch(error => {
-          console.error('catch error', error);
-          console.groupEnd();
-
+          if (error['@type'] === 'error') {
+            showError(error.message);
+          }
           throw error;
         });
     } else {
@@ -100,12 +106,5 @@ class TdLib {
 }
 
 const TdLibCtrl = new TdLib();
-
-TdLibCtrl.init();
-TdLibCtrl.sendTdParameters();
-// Needed for correct another request
-TdLibCtrl.send({
-  '@type': 'checkDatabaseEncryptionKey'
-});
 
 export default TdLibCtrl;

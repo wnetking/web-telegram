@@ -1,7 +1,7 @@
 import { trans } from '../../services';
 import { push } from '../../services/router';
 const t = trans('auth');
-// import { api } from '../../services';
+import { api } from '../../services';
 
 const template = document.createElement('template');
 
@@ -78,18 +78,11 @@ window.customElements.define(
       }
 
       this.$submitButton.setAttribute('is-loading', null);
-      // api
-      //   .send({
-      //     '@type': 'setAuthenticationPhoneNumber',
-      //     // Твой телефон
-      //     phone_number: this.telephone
-      //   })
-      //   .then(resp => {
-      //     if (resp['@type'] == 'ok') {
-      //       push('/#/code-confirm');
-      //     }
-      //   });
       push('/#/code-confirm');
+      api.send({
+        '@type': 'setAuthenticationPhoneNumber',
+        phone_number: this.telephone
+      });
     }
   }
 );

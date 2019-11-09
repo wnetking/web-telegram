@@ -1,0 +1,21 @@
+#toast-container{
+  position: fixed;
+  top: 0;
+  right: 8rem;
+  width: 100%;
+  left: 0;
+  .toast{
+    max-width: 20rem;
+    width: 100%;
+    position: absolute;
+    right: 7rem;
+    top: 0;
+    box-shadow: 1px 3px 10px #848484;
+    word-break: break-word;
+    &.toast-error{
+      background: #c30000;
+      color: #fff;
+      padding: 1rem;
+    }
+  }
+}

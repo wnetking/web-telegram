@@ -9,6 +9,7 @@ import {
 } from '../../utils/common.js';
 import config from '../../configs/index.js';
 import reducers from '../reducers/';
+import showError from '../../utils/errors.js';
 
 const getAllReducers = reducers(); 
 
@@ -74,8 +75,9 @@ class TdLib {
           return result;
         })
         .catch(error => {
-          console.error('catch error', error);
-
+          if(error['@type'] === 'error'){
+            showError(error.message);
+          }
           throw error;
         });
     } else {

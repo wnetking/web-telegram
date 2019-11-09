@@ -6,15 +6,27 @@ function checkMainState(update) {
 
   console.log(update);
 
-  switch(update['@type']){
-    case 'updateAuthorizationState' : 
-      if(update.authorization_state['@type'] === "authorizationStateReady"){
-        push('#/chat')
-      }; break;
+  switch (update['@type']) {
+    case 'updateAuthorizationState':
 
-    default : break;
+      switch (update.authorization_state['@type']) {
+        case "authorizationStateReady":
+          push('#/chat');
+          break;
+        case "authorizationStateWaitPhoneNumber":
+          push('#/auth');
+          break;
+        case "authorizationStateClosed":
+          push('#/auth');
+          break;
+      }
+
+      break;
+
+    default:
+      break;
   }
-  
+
 }
 
 

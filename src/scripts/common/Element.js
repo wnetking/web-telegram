@@ -1,13 +1,18 @@
 class AppElement extends HTMLElement {
   constructor() {
     super();
-    document.addEventListener('storeUpdate', e => {
-      const { detail } = e;
-      this.storeUpdate(detail);
-    });
+    this.onStoreUpdateHandler = this.onStoreUpdateHandler.bind(this);
+    document.addEventListener('storeUpdate', this.onStoreUpdateHandler);
   }
 
-  storeUpdate(detail) {}
+  onStoreUpdateHandler(e) {
+    const { detail } = e;
+    this.storeUpdate(detail.prev, detail.next, detail.lastAction);
+  }
+
+  disconnectedCallback() {}
+
+  storeUpdate(prev, next, lastAction) {}
 }
 
 window.AppElement = AppElement;

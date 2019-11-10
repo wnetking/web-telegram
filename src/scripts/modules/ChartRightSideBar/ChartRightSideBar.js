@@ -18,7 +18,7 @@ template.innerHTML = `
 
 window.customElements.define(
   'app-chat-right-sidebar',
-  class extends AppElement {
+  class extends HTMLElement {
     constructor() {
       super();
       this._shadowRoot = this.attachShadow({ mode: 'open' });

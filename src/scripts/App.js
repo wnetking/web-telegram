@@ -30,7 +30,7 @@ template.innerHTML = `
 
 window.customElements.define(
   'main-app',
-  class extends AppElement {
+  class extends HTMLElement {
     constructor() {
       super();
       this.appendChild(template.content.cloneNode(true));
@@ -40,15 +40,9 @@ window.customElements.define(
       this.router = new Router(this.$app, routes, store);
     }
 
-    storeUpdate(detail) {
-      console.log('Get update store', detail);
-    }
-
     connectedCallback() {
       this.router.init();
 
-      // Update state
-      store.test = 'test';
       if (this._isAuth) {
         push('/');
       } else {

@@ -1,3 +1,5 @@
+import * as a from '../../../services/store/actions/chatActions';
+
 const template = document.createElement('template');
 
 template.innerHTML = `
@@ -91,14 +93,17 @@ window.customElements.define(
       this._shadowRoot.appendChild(template.content.cloneNode(true));
       this._data;
       this.$wrap = this._shadowRoot.querySelector('.wrap');
+      this.onWrapClickHandler = this.onWrapClickHandler.bind(this);
 
-      this.$wrap.addEventListener('click', e =>
-        this.drawRipple(e.offsetX, e.offsetY)
-      );
+      this.$wrap.addEventListener('click', this.onWrapClickHandler);
     }
 
     connectedCallback() {
       this.render();
+    }
+
+    disconnectedCallback() {
+      this.$wrap.removeEventListener('click', this.onWrapClickHandler);
     }
 
     static get observedAttributes() {
@@ -119,6 +124,14 @@ window.customElements.define(
       div.style.left = `${x - div.clientWidth / 2}px`;
       div.classList.add('run');
       div.addEventListener('transitionend', e => div.remove());
+    }
+
+    onWrapClickHandler(e) {
+      this.drawRipple(e.offsetX, e.offsetY);
+      a.getChatHistory({
+        chat_id: this.id,
+        from_message_id: this._data.last_message.id || 0
+      });
     }
 
     get id() {

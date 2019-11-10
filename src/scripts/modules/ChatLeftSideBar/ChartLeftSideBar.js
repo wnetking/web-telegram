@@ -1,11 +1,12 @@
 import './ChatListItem';
-import { api, store } from '../../../services';
+import * as a from '../../../services/store/actions/chatListActions';
+import * as chatA from '../../../services/store/actions/chatActions';
+
 // import mock from './mock';
 
 // const chats = new Map(mock);
 // console.log('chats', chats);
 
-window.store = store;
 const template = document.createElement('template');
 
 template.innerHTML = `
@@ -33,51 +34,39 @@ window.customElements.define(
       this._shadowRoot = this.attachShadow({ mode: 'open' });
       this._shadowRoot.appendChild(template.content.cloneNode(true));
       this.$loader = this._shadowRoot.querySelector('app-loader');
-      store.chats = new Map();
+      this.renderFirstChatDetails = false;
+    }
+
+    storeUpdate(prev, next, lastAction) {
+      if (lastAction.type === 'chatList.setChatInfo') {
+        if (this.$loader) {
+          this.$loader.remove();
+        }
+        const chat = Object.values(lastAction.payload)[0];
+        this.renderChat(chat, chat.id);
+
+        if (!this.renderFirstChatDetails) {
+          this.renderFirstChatDetails = true;
+          chatA.getChatHistory({
+            chat_id: chat.id,
+            from_message_id: chat.last_message.id || 0
+          });
+        }
+      }
     }
 
     connectedCallback() {
-      api
-        .send({
-          '@type': 'getChats',
-          offset_chat_id: 0,
-          offset_order: '9223372036854775807',
-          limit: 10
-        })
-        .then(data => {
-          this.loadChats(data.chat_ids);
-        })
-        .catch(error => {
-          console.err('getChats', error);
-        });
-
-      // chats.forEach((chat, chatId) => {
-      //   this.renderChat(chat, chatId);
-      // });
-    }
-
-    loadChats(chatsId = []) {
-      chatsId.forEach(this.loadChat.bind(this));
-    }
-
-    loadChat(chatId) {
-      api
-        .send({
-          '@type': 'getChat',
-          chat_id: chatId
-        })
-        .then(data => {
-          store.chats.set(chatId, data);
-
-          if (this.$loader) {
-            this.$loader.remove();
-          }
-
-          this.renderChat(data, chatId);
-        });
+      a.getChatAction({
+        offset_chat_id: 0,
+        offset_order: '9223372036854775807',
+        limit: 10
+      });
     }
 
     renderChat(chat, chatId) {
+      if (document.querySelector(`app-chat-left-list-item[id="${chatId}"]`)) {
+        return;
+      }
       const chatNode = document.createElement('app-chat-left-list-item');
       chatNode.data = chat;
       chatNode.id = chatId;

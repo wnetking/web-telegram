@@ -2,7 +2,7 @@ import TdClient from 'tdweb/dist/tdweb';
 import { WASM_FILE_HASH, WASM_FILE_NAME } from '../../utils/constants.js';
 import { getBrowser, getOSName } from '../../utils/common.js';
 import config from '../../configs/index.js';
-import reducers from '../reducers/';
+import states from '../response-states';
 import showError from '../../utils/errors.js';
 
 class TdLib {
@@ -50,7 +50,7 @@ class TdLib {
     this.client = new TdClient(options);
 
     this.client.onUpdate = update => {
-      reducers(update);
+      states(update);
     };
   }
 

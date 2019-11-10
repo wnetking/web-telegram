@@ -1,4 +1,6 @@
-import { trans } from '../../services';
+import {
+  trans
+} from '../../services';
 const t = trans('auth');
 
 const template = document.createElement('template');
@@ -62,7 +64,9 @@ window.customElements.define(
   class extends HTMLElement {
     constructor() {
       super();
-      this._shadowRoot = this.attachShadow({ mode: 'open' });
+      this._shadowRoot = this.attachShadow({
+        mode: 'open'
+      });
       this._shadowRoot.appendChild(template.content.cloneNode(true));
       this.$heading = this._shadowRoot.querySelector('h2');
       this.$section = this._shadowRoot.querySelector('section');

@@ -1,7 +1,13 @@
-import { trans } from '../../services';
-import { push } from '../../services/router';
+import {
+  trans
+} from '../../services';
+import {
+  push
+} from '../../services/router';
+import {
+  api
+} from '../../services';
 const t = trans('auth');
-import { api } from '../../services';
 
 const template = document.createElement('template');
 
@@ -25,7 +31,7 @@ template.innerHTML = `
 
 window.customElements.define(
   'app-auth',
-  class extends HTMLElement {
+  class extends AppElement {
     constructor() {
       super();
       this._shadowRoot = this.attachShadow({
@@ -76,9 +82,7 @@ window.customElements.define(
       if (!this.telephone) {
         return false;
       }
-
       this.$submitButton.setAttribute('is-loading', null);
-      push('/#/code-confirm');
       api.send({
         '@type': 'setAuthenticationPhoneNumber',
         phone_number: this.telephone

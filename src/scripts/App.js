@@ -10,13 +10,6 @@ api.send({
   '@type': 'checkDatabaseEncryptionKey'
 });
 
-// Отпрвка кода  на мой телефон
-// TdLibController.send({
-//   '@type': 'setAuthenticationPhoneNumber',
-//   // Твой телефон
-//   phone_number: "+380934282332"
-// })
-
 const template = document.createElement('template');
 template.innerHTML = `
     <style>

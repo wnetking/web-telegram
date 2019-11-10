@@ -43,6 +43,11 @@ window.customElements.define(
       api.send({
         '@type': 'checkAuthenticationCode',
         code: value,
+      }).then( () => {
+        api.send({
+          '@type' : 'acceptTermsOfService',
+          terms_of_service_id_ : '0'
+        })
       })
     }
 

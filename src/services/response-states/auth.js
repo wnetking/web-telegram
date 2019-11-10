@@ -1,7 +1,7 @@
 import { push } from '../router';
 
 function chechAuthState(update) {
-  // console.log(update);
+  console.log(update);
 
   switch (update['@type']) {
     case 'updateAuthorizationState':

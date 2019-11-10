@@ -76,9 +76,7 @@ window.customElements.define(
       if (!this.telephone) {
         return false;
       }
-
       this.$submitButton.setAttribute('is-loading', null);
-      push('/#/code-confirm');
       api.send({
         '@type': 'setAuthenticationPhoneNumber',
         phone_number: this.telephone

@@ -28,3 +28,10 @@ export const authorizationStateWaitCode = bindActionCreators(
   }),
   dispatch
 );
+
+export const authorizationStateWaitPassword = bindActionCreators(
+  () => ({
+    type: 'auth.authorizationStateWaitPassword',
+  }),
+  dispatch
+);

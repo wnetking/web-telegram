@@ -25,6 +25,10 @@ function chechAuthState(update) {
           a.authorizationStateWaitCode();
           push('#/code-confirm');
           break;
+        case 'authorizationStateWaitPassword':
+          a.authorizationStateWaitPassword()
+          push('#/password');
+          break;
       }
       break;
 

@@ -2,7 +2,8 @@ const initialState = {
   isUserAuth: false,
   authWaitPhoneNumber: false,
   authWaitCode: false,
-  authHasErrors: false
+  authWaitPassword: false,
+  authHasErrors: false,
 };
 
 module.exports = function (state = initialState, action) {
@@ -24,7 +25,7 @@ module.exports = function (state = initialState, action) {
       return {
         ...state,
         isUserAuth: false,
-          authHasErrors: true
+        authHasErrors: true
       };
 
     case 'auth.authorizationStateWaitCode':
@@ -32,6 +33,12 @@ module.exports = function (state = initialState, action) {
         ...state,
         authWaitCode: true
       };
+
+    case 'auth.authorizationStateWaitPassword':
+      return {
+        ...state,
+        authWaitPassword: true
+      }
 
     default:
       return state;

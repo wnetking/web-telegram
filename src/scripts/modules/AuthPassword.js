@@ -94,11 +94,8 @@ window.customElements.define(
 
     onSubmitButtonHandle(){
       api.send({
-        '@type': 'setPassword',
-        old_password: '',
-        new_password : this._password,
-        new_hint: '',
-        set_recovery_email_address: false
+        '@type': 'checkAuthenticationPassword',
+        password: this._password,
       })
     }
 

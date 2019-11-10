@@ -23,44 +23,17 @@ template.innerHTML = `
 
 window.customElements.define(
   'main-app',
-  class extends HTMLElement {
+  class extends AppElement {
     constructor() {
       super();
       this.appendChild(template.content.cloneNode(true));
 
-      this._isAuth = false;
       this.$app = document.getElementById('app');
       this.router = new Router(this.$app, routes, store);
     }
 
     connectedCallback() {
       this.router.init();
-
-      if (this._isAuth) {
-        push('/');
-      } else {
-        push('/#/chat');
-      }
-    }
-
-    static get observedAttributes() {
-      return ['is-auth'];
-    }
-
-    attributeChangedCallback(name, oldVal, newVal) {
-      if (name === 'is-auth') {
-        this.isAuth = newVal;
-      }
-    }
-
-    get isAuth() {
-      return this._isAuth;
-    }
-
-    set isAuth(value = false) {
-      this._isAuth = value;
-
-      push('/');
     }
 
     render(path) {}

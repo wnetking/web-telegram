@@ -1,5 +1,10 @@
-import { trans } from '../../services';
-import { push } from '../../services/router';
+import {
+  trans,
+  api
+} from '../../services';
+import {
+  push
+} from '../../services/router';
 const t = trans('auth');
 
 const template = document.createElement('template');
@@ -23,16 +28,22 @@ window.customElements.define(
   class extends HTMLElement {
     constructor() {
       super();
-      this._shadowRoot = this.attachShadow({ mode: 'open' });
+      this._shadowRoot = this.attachShadow({
+        mode: 'open'
+      });
       this._shadowRoot.appendChild(template.content.cloneNode(true));
+
       this.$submitButton = this._shadowRoot.querySelector('app-button');
-      this.$submitButton.addEventListener('click', this._auth.bind(this));
+      this.$submitButton.addEventListener('click',this.onSubmitButtonHandle.bind(this));
 
       this.$input = this._shadowRoot.querySelector('app-input');
       this.$input.addEventListener(
         'toggle-password',
         this.inputFocus.bind(this)
       );
+      this.$input.addEventListener('change', this.onChangeHandle.bind(this));
+
+      this._password = null;
     }
 
     connectedCallback() {
@@ -51,7 +62,9 @@ window.customElements.define(
     }
 
     inputFocus(e) {
-      const { isPasswordShow } = e.detail;
+      const {
+        isPasswordShow
+      } = e.detail;
 
       if (isPasswordShow) {
         const stikerPath = './public/images/TwoFactorSetupMonkeyPeek.tgs';
@@ -68,6 +81,27 @@ window.customElements.define(
 
       this.player.play();
     }
+
+    onChangeHandle(e) {
+      const {
+        detail: {
+          value
+        }
+      } = e;
+
+      this._password = String(value)
+    }
+
+    onSubmitButtonHandle(){
+      api.send({
+        '@type': 'setPassword',
+        old_password: '',
+        new_password : this._password,
+        new_hint: '',
+        set_recovery_email_address: false
+      })
+    }
+
 
     _auth() {
       push('/#/chat');

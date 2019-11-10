@@ -34,28 +34,31 @@ window.customElements.define(
       this._shadowRoot = this.attachShadow({ mode: 'open' });
       this._shadowRoot.appendChild(template.content.cloneNode(true));
       this.$loader = this._shadowRoot.querySelector('app-loader');
+      this.setChatInfoHandler = this.setChatInfoHandler.bind(this);
       this.renderFirstChatDetails = false;
     }
 
-    storeUpdate(prev, next, lastAction) {
-      if (lastAction.type === 'chatList.setChatInfo') {
-        if (this.$loader) {
-          this.$loader.remove();
-        }
-        const chat = Object.values(lastAction.payload)[0];
-        this.renderChat(chat, chat.id);
+    setChatInfoHandler({ detail }) {
+      if (this.$loader) {
+        this.$loader.remove();
+      }
+      const chat = Object.values(detail.action.payload)[0];
+      this.renderChat(chat, chat.id);
 
-        if (!this.renderFirstChatDetails) {
-          this.renderFirstChatDetails = true;
-          chatA.getChatHistory({
-            chat_id: chat.id,
-            from_message_id: chat.last_message.id || 0
-          });
-        }
+      if (!this.renderFirstChatDetails) {
+        this.renderFirstChatDetails = true;
+        chatA.getChatHistory({
+          chat_id: chat.id,
+          from_message_id: chat.last_message.id || 0
+        });
       }
     }
 
     connectedCallback() {
+      document.addEventListener(
+        'chatList.setChatInfo',
+        this.setChatInfoHandler
+      );
       a.getChatAction({
         offset_chat_id: 0,
         offset_order: '9223372036854775807',

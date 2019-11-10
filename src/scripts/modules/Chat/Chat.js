@@ -25,17 +25,25 @@ window.customElements.define(
       this._shadowRoot.appendChild(template.content.cloneNode(true));
       this.$loader = this._shadowRoot.querySelector('app-loader');
       this.$wrap = this._shadowRoot.querySelector('div');
+      this.setChatHistoryToStoreHandler = this.setChatHistoryToStoreHandler.bind(
+        this
+      );
     }
 
-    storeUpdate(prev, next, lastAction) {
-      if (lastAction.type === 'chat.setChatHistoryToStore') {
-        if (this.$loader) {
-          this.$loader.remove();
-        }
+    connectedCallback() {
+      document.addEventListener(
+        'chat.setChatHistoryToStore',
+        this.setChatHistoryToStoreHandler
+      );
+    }
 
-        const messageInfo = next.chat.currentChatMessages;
-        this.render(messageInfo);
+    setChatHistoryToStoreHandler({ detail }) {
+      if (this.$loader) {
+        this.$loader.remove();
       }
+
+      const messageInfo = detail.store.chat.currentChatMessages;
+      this.render(messageInfo);
     }
 
     render(data) {

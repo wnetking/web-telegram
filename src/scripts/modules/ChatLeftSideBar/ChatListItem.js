@@ -154,6 +154,7 @@ window.customElements.define(
       if (lastMessage.content.caption) {
         return lastMessage.content.caption.text;
       }
+      console.log(lastMessage);
 
       return lastMessage.content.text.text;
     }

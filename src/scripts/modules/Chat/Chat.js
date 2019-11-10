@@ -4,6 +4,8 @@ template.innerHTML = `
     <style>
       :host {
         position: relative;
+        max-height: 100vh;
+        overflow-y: auto;
       }
 
       app-loader{

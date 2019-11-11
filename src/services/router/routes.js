@@ -15,6 +15,9 @@ const routes = {
   },
   '#/chat': {
     component: 'app-chat-container'
+  },
+  '#/registration' : {
+    component: 'app-registration'
   }
 };
 

@@ -23,7 +23,7 @@ template.innerHTML = `
         }
     </style>
     <app-auth-section heading="${t.sign_in}" desc="${t.sign_in_desc}" img-src="./public/images/telegram.svg" >
-      <app-input type="text" label="${t.country}" value="test" has-error error-message="error"></app-input>
+      <app-input type="text" label="${t.country}"></app-input>
       <app-input type="tel" value='' label="${t.phone}" pattern="^(?:\(\d{3}\)|\d{3})[- ]?\d{3}[- ]?\d{4}$"></app-input>
       <app-button class="hidden">${t.phone_submit}</app-button>
     </app-auth-section>

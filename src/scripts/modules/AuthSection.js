@@ -108,7 +108,7 @@ window.customElements.define(
       `;
       }
 
-      return `<img src="${src}" alt="image" width="160" height="160" class="main-logo"/>`;
+      return `<div class='img-wrapper'><img src="${src}" alt="image" width="160" height="160" class="main-logo"/></div>`;
     }
 
     connectedCallback() {

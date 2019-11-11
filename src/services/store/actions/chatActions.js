@@ -7,6 +7,7 @@ export const getChatHistory = (params = {}) => {
   //   '@type': 'openChat',
   //   chat_id: params.chat_id
   // });
+  getChatHistoryRequest();
 
   api
     .send({
@@ -19,6 +20,11 @@ export const getChatHistory = (params = {}) => {
       setChatHistoryToStore(params.chat_id, data);
     });
 };
+
+const getChatHistoryRequest = bindActionCreators(
+  () => ({ type: 'chat.getChatHistoryRequest' }),
+  dispatch
+);
 
 const setChatHistoryToStore = bindActionCreators(
   (chat_id, data) => ({

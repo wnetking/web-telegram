@@ -14,7 +14,6 @@ template.innerHTML = `
     :host {
       position: relative;
       max-height: 100vh;
-      overflow-y: auto;
     }
 
     app-loader{
@@ -37,7 +36,7 @@ window.customElements.define(
       this._shadowRoot.appendChild(template.content.cloneNode(true));
       this.$loader = this._shadowRoot.querySelector('app-loader');
       this.setChatInfoHandler = this.setChatInfoHandler.bind(this);
-      this.renderFirstChatDetails = false;
+      this.renderFirstChatDetails = true;
     }
 
     setChatInfoHandler({ detail }) {
@@ -47,8 +46,9 @@ window.customElements.define(
       const chat = Object.values(detail.action.payload)[0];
       this.renderChat(chat, chat.id);
 
-      if (!this.renderFirstChatDetails) {
-        this.renderFirstChatDetails = true;
+      if (this.renderFirstChatDetails) {
+        this.renderFirstChatDetails = false;
+
         chatA.getChatHistory({
           chat_id: chat.id,
           from_message_id: chat.last_message.id || 0
@@ -72,6 +72,7 @@ window.customElements.define(
       if (document.querySelector(`app-chat-left-list-item[id="${chatId}"]`)) {
         return;
       }
+
       const chatNode = document.createElement('app-chat-left-list-item');
       chatNode.data = chat;
       chatNode.id = chatId;

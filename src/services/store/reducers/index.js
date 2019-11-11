@@ -7,7 +7,8 @@ function lastAction(state = null, action) {
 const combinedReducer = combineReducers({
   chatList: require('./chatsList'),
   chat: require('./chat'),
-  userInfo : require('./userInfo'),
+  userInfo: require('./userInfo'),
+  options: require('./options'),
   lastAction
 });
 

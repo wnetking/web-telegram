@@ -1,10 +1,14 @@
-import {
-  push
-} from '../router';
+import { push } from '../router';
 import * as a from '../store/actions/userInfo.js';
+import { updateOption } from '../store/actions/options';
 
 function chechAuthState(update) {
-  console.log(update);
+  // console.log(update);
+
+  if (update['@type'] === 'updateOption') {
+    const { name, value } = update;
+    updateOption(name, value);
+  }
 
   switch (update['@type']) {
     case 'updateAuthorizationState':
@@ -14,11 +18,11 @@ function chechAuthState(update) {
           push('#/chat');
           break;
         case 'authorizationStateWaitPhoneNumber':
-          a.authorizationStateWaitPhoneNumber()
+          a.authorizationStateWaitPhoneNumber();
           push('#/auth');
           break;
         case 'authorizationStateClosed':
-          a.authorizationStateClosed()
+          a.authorizationStateClosed();
           push('#/auth');
           break;
         case 'authorizationStateWaitCode':
@@ -26,7 +30,7 @@ function chechAuthState(update) {
           push('#/code-confirm');
           break;
         case 'authorizationStateWaitPassword':
-          a.authorizationStateWaitPassword()
+          a.authorizationStateWaitPassword();
           push('#/password');
           break;
       }

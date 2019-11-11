@@ -1,4 +1,5 @@
 import * as a from '../../../services/store/actions/chatActions';
+import './LastMessage';
 
 const template = document.createElement('template');
 
@@ -72,7 +73,7 @@ template.innerHTML = `
       max-width: calc(100% - var(--size)); 
     }
 
-    .details span{
+    .details span, app-chat-item-last-message{
       display: inline-block;
       overflow: hidden;
       max-width: 100%;
@@ -96,7 +97,17 @@ window.customElements.define(
       this.onWrapClickHandler = this.onWrapClickHandler.bind(this);
 
       this.$wrap.addEventListener('click', this.onWrapClickHandler);
+      this.setChatHistoryToStoreHandler = this.setChatHistoryToStoreHandler.bind(
+        this
+      );
+
+      document.addEventListener(
+        'chat.setChatHistoryToStore',
+        this.setChatHistoryToStoreHandler
+      );
     }
+
+    setChatHistoryToStoreHandler({ detail }) {}
 
     connectedCallback() {
       this.render();
@@ -104,6 +115,10 @@ window.customElements.define(
 
     disconnectedCallback() {
       this.$wrap.removeEventListener('click', this.onWrapClickHandler);
+      document.removeEventListener(
+        'chat.setChatHistoryToStore',
+        this.setChatHistoryToStoreHandler
+      );
     }
 
     static get observedAttributes() {
@@ -146,17 +161,11 @@ window.customElements.define(
       this.setAttribute('updateKey', 'ne key');
     }
 
-    getLastMessage(lastMessage) {
-      if (!lastMessage) {
-        return '';
-      }
-
-      if (lastMessage.content.caption) {
-        return lastMessage.content.caption.text;
-      }
-      console.log(lastMessage);
-
-      return lastMessage.content.text.text;
+    setLastMessage() {
+      const lastMessageNode = this._shadowRoot.querySelector(
+        'app-chat-item-last-message'
+      );
+      lastMessageNode.message = this._data.last_message;
     }
 
     render() {
@@ -166,9 +175,10 @@ window.customElements.define(
           </div>
           <div class="details">
           <h3 class="title">${this._data.title}</h3>
-          <span>${this.getLastMessage(this._data.last_message)}</span>
+          <app-chat-item-last-message></app-chat-item-last-message>
           </div>
       `;
+      this.setLastMessage();
     }
   }
 );

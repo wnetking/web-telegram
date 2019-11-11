@@ -1,4 +1,5 @@
 import './ChatMessage';
+import * as a from '../../../services/store/actions/chatActions';
 
 const template = document.createElement('template');
 
@@ -86,6 +87,8 @@ window.customElements.define(
       this.getChatHistoryRequestHandler = this.getChatHistoryRequestHandler.bind(
         this
       );
+
+      this.addEventListener('scroll', a.getChatHistoryOnScroll);
     }
 
     connectedCallback() {
@@ -101,6 +104,16 @@ window.customElements.define(
         'chat.getChatHistoryRequest',
         this.getChatHistoryRequestHandler
       );
+
+      document.addEventListener('chat.updateChatHistory', ({ detail }) => {
+        const wrap = this._shadowRoot.querySelector('.messages');
+        const messages = this.getMessagesNodes(
+          detail.action.payload,
+          detail.store
+        );
+
+        wrap.prepend(messages);
+      });
     }
 
     disconnectedCallback() {
@@ -137,16 +150,11 @@ window.customElements.define(
       return false;
     }
 
-    render(data, store) {
-      //временно
-      this.$wrap.innerHTML = '';
+    getMessagesNodes(data, store) {
       const fragment = document.createDocumentFragment();
-      const messagesWrap = document.createElement('div'); // assuming ul exists
-      messagesWrap.classList.add('messages');
-
       (data.messages || []).reverse().forEach((message, index) => {
         const isOutgoing = message.sender_user_id === store.options.my_id.value;
-        var messageNode = document.createElement('app-chat-message');
+        let messageNode = document.createElement('app-chat-message');
         messageNode.message = message;
         const hasArrow = this.hasArrow(
           message,
@@ -165,7 +173,18 @@ window.customElements.define(
         fragment.appendChild(messageNode);
       });
 
-      messagesWrap.appendChild(fragment);
+      return fragment;
+    }
+
+    render(data, store) {
+      //временно
+      this.$wrap.innerHTML = '';
+      const messagesWrap = document.createElement('div'); // assuming ul exists
+      messagesWrap.classList.add('messages');
+
+      const messages = this.getMessagesNodes(data, store);
+
+      messagesWrap.appendChild(messages);
       this.$wrap.appendChild(messagesWrap);
 
       this.scroll(0, this.scrollHeight);

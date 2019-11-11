@@ -64,7 +64,7 @@ window.customElements.define(
       a.getChatAction({
         offset_chat_id: 0,
         offset_order: '9223372036854775807',
-        limit: 10
+        limit: 30
       });
     }
 

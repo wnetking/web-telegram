@@ -33,6 +33,9 @@ function chechAuthState(update) {
           a.authorizationStateWaitPassword();
           push('#/password');
           break;
+        case 'authorizationStateWaitRegistration':
+          push('#/registration');
+          break;
       }
       break;
 

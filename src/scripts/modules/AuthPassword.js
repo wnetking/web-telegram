@@ -55,6 +55,15 @@ window.customElements.define(
       }
     }
 
+    disconnectedCallback() {
+      this.$submitButton.removeEventListener('click',this.onSubmitButtonHandle.bind(this));
+      this.$input.removeEventListener(
+        'toggle-password',
+        this.inputFocus.bind(this)
+      );
+      this.$input.removeEventListener('change', this.onChangeHandle.bind(this));
+    }
+
     pause() {
       setTimeout(() => {
         this.player.pause();
@@ -97,11 +106,6 @@ window.customElements.define(
         '@type': 'checkAuthenticationPassword',
         password: this._password,
       })
-    }
-
-
-    _auth() {
-      push('/#/chat');
     }
   }
 );

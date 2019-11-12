@@ -12,7 +12,12 @@ const state = {
     code_desc: 'We have send you an SMS with the code.',
     password_header: 'Enter a Password',
     password_desc: 'You account is protected with an additional password',
-    password: 'Password'
+    password: 'Password',
+    registration_name: 'Your name',
+    registration_desc: 'Enter yout name and add a profile picture',
+    name : 'Name',
+    last_name : 'Last name (optional)',
+    start_messanging: 'Start messanging'
   }
 };
 

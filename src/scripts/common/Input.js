@@ -70,14 +70,14 @@ template.innerHTML = `
         }
     </style>
     <div class="input-wrap">
-      <input type="text" id="my-checkbox"/>
-      <label for="my-checkbox"></label>
+      <input type="text" id="my-input"/>
+      <label for="my-input"></label>
     </div>
 `;
 
 window.customElements.define(
   'app-input',
-  class extends HTMLElement {
+  class Input extends HTMLElement {
     constructor() {
       super();
       this._shadowRoot = this.attachShadow({ mode: 'open' });

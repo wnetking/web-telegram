@@ -130,6 +130,7 @@ window.customElements.define(
         this.typePasswordRendered();
       }
 
+      this.$input.addEventListener('click', this.clickHandler.bind(this))
       this.$input.addEventListener('keyup', this.keyupHandler.bind(this));
       this.$input.addEventListener('change', this.changeHandler.bind(this));
     }
@@ -167,6 +168,13 @@ window.customElements.define(
      */
     changeHandler(e) {
       const event = new CustomEvent('change', {
+        detail: { value: e.target.value, target: e.target }
+      });
+      this.dispatchEvent(event);
+    }
+
+    clickHandler(e){
+      const event = new CustomEvent('click', {
         detail: { value: e.target.value, target: e.target }
       });
       this.dispatchEvent(event);

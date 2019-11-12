@@ -54,6 +54,9 @@ window.customElements.define(
           from_message_id: chat.last_message.id || 0
         });
       }
+
+
+      this.addEventListener('scroll', a.getChatListOnScroll);
     }
 
     connectedCallback() {
@@ -66,6 +69,8 @@ window.customElements.define(
         offset_order: '9223372036854775807',
         limit: 30
       });
+
+
     }
 
     renderChat(chat, chatId) {

@@ -31,7 +31,7 @@ template.innerHTML = `
 
 window.customElements.define(
   'app-auth',
-  class extends AppElement {
+  class extends HTMLElement {
     constructor() {
       super();
       this._shadowRoot = this.attachShadow({
@@ -41,6 +41,8 @@ window.customElements.define(
 
       this.$submitButton = this._shadowRoot.querySelector('app-button');
       this.$inputPhone = this._shadowRoot.querySelector('[type=tel]');
+
+      this.telephone = '';
 
       this.$submitButton.addEventListener(
         'click',
@@ -56,8 +58,23 @@ window.customElements.define(
         'keyup',
         this.onKeydownPhoneHandler.bind(this)
       );
+    }
 
-      this.telephone = '';
+    disconnectedCallback() {
+      this.$submitButton.removeEventListener(
+        'click',
+        this.sendPhoneHandle.bind(this)
+      );
+
+      this.$inputPhone.removeEventListener(
+        'change',
+        this.onChangePhoneHandle.bind(this)
+      );
+
+      this.$inputPhone.removeEventListener(
+        'keydown',
+        this.onKeydownPhoneHandler.bind(this)
+      );
     }
 
     onKeydownPhoneHandler(e) {
@@ -70,11 +87,16 @@ window.customElements.define(
       } else {
         this.$submitButton.classList.add('hidden');
       }
+
+      // Submit enter
+      if (e.keyCode === 13) {
+        this.sendPhoneHandle();
+      }
     }
+    
 
     onChangePhoneHandle(e) {
-      this.onKeydownPhoneHandler();
-
+      // this.onKeydownPhoneHandler();
       this.telephone = String(e.detail.value);
     }
 

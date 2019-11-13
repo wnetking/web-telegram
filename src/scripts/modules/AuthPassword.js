@@ -34,16 +34,17 @@ window.customElements.define(
       this._shadowRoot.appendChild(template.content.cloneNode(true));
 
       this.$submitButton = this._shadowRoot.querySelector('app-button');
-      this.$submitButton.addEventListener('click',this.onSubmitButtonHandle.bind(this));
-
       this.$input = this._shadowRoot.querySelector('app-input');
+
+      this._password = null;
+
       this.$input.addEventListener(
         'toggle-password',
         this.inputFocus.bind(this)
       );
       this.$input.addEventListener('change', this.onChangeHandle.bind(this));
-
-      this._password = null;
+      this.$input.addEventListener('keydown', this.onKeyDownHandle.bind(this));
+      this.$submitButton.addEventListener('click', this.onSubmitButtonHandle.bind(this));
     }
 
     connectedCallback() {
@@ -56,12 +57,13 @@ window.customElements.define(
     }
 
     disconnectedCallback() {
-      this.$submitButton.removeEventListener('click',this.onSubmitButtonHandle.bind(this));
+      this.$submitButton.removeEventListener('click', this.onSubmitButtonHandle.bind(this));
       this.$input.removeEventListener(
         'toggle-password',
         this.inputFocus.bind(this)
       );
       this.$input.removeEventListener('change', this.onChangeHandle.bind(this));
+      this.$input.removeEventListener('keydown', this.onKeyDownHandle.bind(this));
     }
 
     pause() {
@@ -101,7 +103,14 @@ window.customElements.define(
       this._password = String(value)
     }
 
-    onSubmitButtonHandle(){
+    onKeyDownHandle(e) {
+      if (e.keyCode === 13) {
+        this._password = this.$input.$input.value;
+        this.onSubmitButtonHandle();
+      }
+    }
+
+    onSubmitButtonHandle() {
       api.send({
         '@type': 'checkAuthenticationPassword',
         password: this._password,

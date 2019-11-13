@@ -85,8 +85,12 @@ window.customElements.define(
       this.$file = this._shadowRoot.querySelector('[type="file"]');
 
       this.$name_input.addEventListener('change', this.onChangeName.bind(this));
+      this.$name_input.addEventListener('keydown', this.onKeyDownHandle.bind(this));
+
       this.$lastname_input.addEventListener('change', this.onChangeLastName.bind(this));
-      this.$button.addEventListener('click', this.onSubmitButton.bind(this));
+      this.$lastname_input.addEventListener('keydown', this.onKeyDownHandle.bind(this));
+
+      this.$button.addEventListener('click', this.onSubmitHandle.bind(this));
       this.$file_label.addEventListener('click', this.onClickLabelFile.bind(this));
 
       this.name = null;
@@ -96,7 +100,11 @@ window.customElements.define(
     disconnectedCallback() {
       this.$name_input.removeEventListener('change', this.onChangeName.bind(this));
       this.$lastname_input.removeEventListener('change', this.onChangeLastName.bind(this));
-      this.$button.removeEventListener('click', this.onSubmitButton.bind(this));
+
+      this.$lastname_input.removeEventListener('keydown', this.onKeyDownHandle.bind(this));
+      this.$name_input.addEventListener('keydown', this.onKeyDownHandle.bind(this));
+
+      this.$button.removeEventListener('click', this.onSubmitHandle.bind(this));
       this.$file_label.removeEventListener('click', this.onClickLabelFile.bind(this));
     }
 
@@ -118,11 +126,19 @@ window.customElements.define(
       this.lastName = value
     }
 
+    onKeyDownHandle(e) {
+      if (e.keyCode === 13) {
+        this.name = this.$name_input.$input.value;
+        this.lastName = this.$lastname_input.$input.value || '';
+        this.onSubmitHandle();
+      }
+    }
+
     onClickLabelFile() {
       this.$file.$input.click();
     }
 
-    onSubmitButton() {
+    onSubmitHandle() {
       api.send({
         '@type': 'registerUser',
         first_name: this.name,

@@ -135,6 +135,12 @@ window.customElements.define(
       this.$input.addEventListener('change', this.changeHandler.bind(this));
     }
 
+    disconnectedCallback() {
+      this.$input.removeEventListener('click', this.clickHandler.bind(this))
+      this.$input.removeEventListener('keyup', this.keyupHandler.bind(this));
+      this.$input.removeEventListener('change', this.changeHandler.bind(this));
+    }
+
     typePasswordRendered() {
       const button = document.createElement('button');
       this.icon = document.createElement('app-icon');
@@ -158,8 +164,8 @@ window.customElements.define(
         this.resetErrorState();
       }
 
-      var event = new KeyboardEvent('keyup', e);
-      this.dispatchEvent(event);
+      // var event = new KeyboardEvent('keyup', e);
+      // this.dispatchEvent(event);
     }
 
     /**

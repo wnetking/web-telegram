@@ -119,7 +119,7 @@ window.customElements.define(
     }
 
     onClickLabelFile() {
-      this.$file.click();
+      this.$file.$input.click();
     }
 
     onSubmitButton() {

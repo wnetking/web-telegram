@@ -17,6 +17,7 @@ template.innerHTML = `
       width: 100%;
       margin-bottom: 25px;
     }
+
     </style>
     <main id="app" class="main-container">Main page</main>
 `;

@@ -1,10 +1,5 @@
-import {
-  trans,
-  api
-} from '../../services';
-import {
-  push
-} from '../../services/router';
+import { trans, api } from '../../services';
+import { push } from '../../services/router';
 const t = trans('auth');
 
 const template = document.createElement('template');
@@ -31,19 +26,22 @@ window.customElements.define(
       });
       this._shadowRoot.appendChild(template.content.cloneNode(true));
       this.$input = this._shadowRoot.querySelector('.confirmation-code');
-      this.$input.addEventListener('change', this.onChangeInputHanlde.bind(this))
+      this.$input.addEventListener(
+        'change',
+        this.onChangeInputHanlde.bind(this)
+      );
+      this.$input.addEventListener('focus', this.inputFocus.bind(this));
+      this.$input.addEventListener('focusout', this.inputFocusOut.bind(this));
     }
 
     onChangeInputHanlde(e) {
       const {
-        detail: {
-          value
-        }
+        detail: { value }
       } = e;
       api.send({
         '@type': 'checkAuthenticationCode',
-        code: value,
-      })
+        code: value
+      });
     }
 
     connectedCallback() {

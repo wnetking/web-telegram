@@ -1,4 +1,6 @@
 import * as a from '../../../services/store/actions/chatActions';
+import './LastMessage';
+import './ChatThumb';
 
 const template = document.createElement('template');
 
@@ -27,7 +29,7 @@ template.innerHTML = `
       margin-right: 7px;
     }
 
-    .wrap:hover{
+    .wrap:hover, .wrap.active{
       background-color: #f4f4f5;
     }
 
@@ -72,7 +74,7 @@ template.innerHTML = `
       max-width: calc(100% - var(--size)); 
     }
 
-    .details span{
+    .details span, app-chat-item-last-message{
       display: inline-block;
       overflow: hidden;
       max-width: 100%;
@@ -96,6 +98,30 @@ window.customElements.define(
       this.onWrapClickHandler = this.onWrapClickHandler.bind(this);
 
       this.$wrap.addEventListener('click', this.onWrapClickHandler);
+      this.setChatHistoryToStoreHandler = this.setChatHistoryToStoreHandler.bind(
+        this
+      );
+
+      document.addEventListener(
+        'chat.setChatHistoryToStore',
+        this.setChatHistoryToStoreHandler
+      );
+    }
+
+    setChatHistoryToStoreHandler({ detail }) {
+      const { chat_id } = detail.action.payload;
+
+      if (!chat_id) {
+        return;
+      }
+
+      if (this.$wrap.classList.contains('active')) {
+        this.$wrap.classList.remove('active');
+      }
+
+      if (chat_id === this._data.id) {
+        this.$wrap.classList.add('active');
+      }
     }
 
     connectedCallback() {
@@ -104,6 +130,10 @@ window.customElements.define(
 
     disconnectedCallback() {
       this.$wrap.removeEventListener('click', this.onWrapClickHandler);
+      document.removeEventListener(
+        'chat.setChatHistoryToStore',
+        this.setChatHistoryToStoreHandler
+      );
     }
 
     static get observedAttributes() {
@@ -129,7 +159,7 @@ window.customElements.define(
     onWrapClickHandler(e) {
       this.drawRipple(e.offsetX, e.offsetY);
       a.getChatHistory({
-        chat_id: this.id,
+        chat_id: this._data.id,
         from_message_id: this._data.last_message.id || 0
       });
     }
@@ -146,28 +176,26 @@ window.customElements.define(
       this.setAttribute('updateKey', 'ne key');
     }
 
-    getLastMessage(lastMessage) {
-      if (!lastMessage) {
-        return '';
-      }
-
-      if (lastMessage.content.caption) {
-        return lastMessage.content.caption.text;
-      }
-
-      return lastMessage.content.text.text;
+    setLastMessage() {
+      const lastMessageNode = this._shadowRoot.querySelector(
+        'app-chat-item-last-message'
+      );
+      lastMessageNode.message = this._data.last_message;
     }
 
     render() {
       this.$wrap.innerHTML = `
-          <div class="thumb">
-          <img src="./public/images/telegram.svg" alt="thumb"/>
-          </div>
+          <div class="thumb"></div>
           <div class="details">
           <h3 class="title">${this._data.title}</h3>
-          <span>${this.getLastMessage(this._data.last_message)}</span>
+          <app-chat-item-last-message></app-chat-item-last-message>
           </div>
       `;
+      this.setLastMessage();
+      const thumb = document.createElement('app-chat-thumb');
+      thumb.file = this._data.photo ? this._data.photo.small : null;
+      const thumbWrap = this.$wrap.querySelector('.thumb');
+      thumbWrap.append(thumb);
     }
   }
 );

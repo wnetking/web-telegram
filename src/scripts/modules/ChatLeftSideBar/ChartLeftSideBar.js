@@ -13,8 +13,13 @@ template.innerHTML = `
     <style>
     :host {
       position: relative;
+      max-height: 100vh;
     }
+     
 
+    div {
+
+    }
     app-loader{
       position: absolute;
       top: 50%;
@@ -34,39 +39,49 @@ window.customElements.define(
       this._shadowRoot = this.attachShadow({ mode: 'open' });
       this._shadowRoot.appendChild(template.content.cloneNode(true));
       this.$loader = this._shadowRoot.querySelector('app-loader');
-      this.renderFirstChatDetails = false;
+      this.setChatInfoHandler = this.setChatInfoHandler.bind(this);
+      this.renderFirstChatDetails = true;
     }
 
-    storeUpdate(prev, next, lastAction) {
-      if (lastAction.type === 'chatList.setChatInfo') {
-        if (this.$loader) {
-          this.$loader.remove();
-        }
-        const chat = Object.values(lastAction.payload)[0];
-        this.renderChat(chat, chat.id);
-
-        if (!this.renderFirstChatDetails) {
-          this.renderFirstChatDetails = true;
-          chatA.getChatHistory({
-            chat_id: chat.id,
-            from_message_id: chat.last_message.id || 0
-          });
-        }
+    setChatInfoHandler({ detail }) {
+      if (this.$loader) {
+        this.$loader.remove();
       }
+      const chat = Object.values(detail.action.payload)[0];
+      this.renderChat(chat, chat.id);
+
+      if (this.renderFirstChatDetails) {
+        this.renderFirstChatDetails = false;
+
+        chatA.getChatHistory({
+          chat_id: chat.id,
+          from_message_id: chat.last_message.id || 0
+        });
+      }
+
+
+      this.addEventListener('scroll', a.getChatListOnScroll);
     }
 
     connectedCallback() {
+      document.addEventListener(
+        'chatList.setChatInfo',
+        this.setChatInfoHandler
+      );
       a.getChatAction({
         offset_chat_id: 0,
         offset_order: '9223372036854775807',
-        limit: 10
+        limit: 30
       });
+
+
     }
 
     renderChat(chat, chatId) {
       if (document.querySelector(`app-chat-left-list-item[id="${chatId}"]`)) {
         return;
       }
+
       const chatNode = document.createElement('app-chat-left-list-item');
       chatNode.data = chat;
       chatNode.id = chatId;

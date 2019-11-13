@@ -20,7 +20,9 @@ template.innerHTML = `
       }
 
       .messages {
+        height: 100%;
         display: flex;
+        justify-content: flex-end;
         flex-direction: column;
         margin-left: 5rem;
         margin-right: 5rem;
@@ -31,7 +33,7 @@ template.innerHTML = `
         max-width: 60%;
         align-self: flex-start;
       }
-
+      
       .own-message{
         align-self: flex-end;
         background-color: #edfadd;
@@ -65,11 +67,11 @@ template.innerHTML = `
       }
 
       app-chat-message{
-        margin-bottom: 5px;
+        margin-bottom: 12px;
       }
 
     </style>
-    <div><app-loader big></app-loader></div>
+    <div class="wrap"><app-loader big></app-loader></div>
 `;
 
 window.customElements.define(

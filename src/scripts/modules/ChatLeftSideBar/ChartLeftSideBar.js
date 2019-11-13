@@ -15,7 +15,11 @@ template.innerHTML = `
       position: relative;
       max-height: 100vh;
     }
+     
 
+    div {
+
+    }
     app-loader{
       position: absolute;
       top: 50%;

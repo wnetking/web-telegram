@@ -4,7 +4,7 @@ template.innerHTML = `
     <style>
     :host {
       display: inline-flex;
-      padding: 7px;
+      padding: 8px;
       border-radius: 10px;
     }
     </style>

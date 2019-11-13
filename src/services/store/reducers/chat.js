@@ -3,10 +3,11 @@ const initialState = {
   currentChat: {},
   currentChatMessages: {},
   loading: false,
-  requestParams: {}
+  requestParams: {},
+  activeChatId: null
 };
 
-module.exports = function(state = initialState, action) {
+module.exports = function (state = initialState, action) {
   switch (action.type) {
     case 'chat.setChatInfo':
       return {
@@ -22,7 +23,8 @@ module.exports = function(state = initialState, action) {
         currentChatMessages: {
           ...state.currentChatMessages,
           ...action.payload.data
-        }
+        },
+        activeChatId: action.payload.chat_id
       };
     default:
       return state;

@@ -1,14 +1,20 @@
 import { push } from '../router';
+import core from '../api/core';
 import * as a from '../store/actions/userInfo.js';
 import { updateOption } from '../store/actions/options';
 
 function chechAuthState(update) {
-  // console.log(update);
 
   if (update['@type'] === 'updateOption') {
     const { name, value } = update;
     updateOption(name, value);
   }
+
+
+  if (update['@type'] === 'updateFile') {
+    core.emmit('file.updateFile', update);
+  }
+
 
   switch (update['@type']) {
     case 'updateAuthorizationState':

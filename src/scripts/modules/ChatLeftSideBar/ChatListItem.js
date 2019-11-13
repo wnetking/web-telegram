@@ -1,5 +1,6 @@
 import * as a from '../../../services/store/actions/chatActions';
 import './LastMessage';
+import './ChatThumb';
 
 const template = document.createElement('template');
 
@@ -28,7 +29,7 @@ template.innerHTML = `
       margin-right: 7px;
     }
 
-    .wrap:hover{
+    .wrap:hover, .wrap.active{
       background-color: #f4f4f5;
     }
 
@@ -107,7 +108,21 @@ window.customElements.define(
       );
     }
 
-    setChatHistoryToStoreHandler({ detail }) {}
+    setChatHistoryToStoreHandler({ detail }) {
+      const { chat_id } = detail.action.payload;
+
+      if (!chat_id) {
+        return;
+      }
+
+      if (this.$wrap.classList.contains('active')) {
+        this.$wrap.classList.remove('active');
+      }
+
+      if (chat_id === this._data.id) {
+        this.$wrap.classList.add('active');
+      }
+    }
 
     connectedCallback() {
       this.render();
@@ -144,7 +159,7 @@ window.customElements.define(
     onWrapClickHandler(e) {
       this.drawRipple(e.offsetX, e.offsetY);
       a.getChatHistory({
-        chat_id: this.id,
+        chat_id: this._data.id,
         from_message_id: this._data.last_message.id || 0
       });
     }
@@ -170,15 +185,17 @@ window.customElements.define(
 
     render() {
       this.$wrap.innerHTML = `
-          <div class="thumb">
-          <img src="./public/images/telegram.svg" alt="thumb"/>
-          </div>
+          <div class="thumb"></div>
           <div class="details">
           <h3 class="title">${this._data.title}</h3>
           <app-chat-item-last-message></app-chat-item-last-message>
           </div>
       `;
       this.setLastMessage();
+      const thumb = document.createElement('app-chat-thumb');
+      thumb.file = this._data.photo ? this._data.photo.small : null;
+      const thumbWrap = this.$wrap.querySelector('.thumb');
+      thumbWrap.append(thumb);
     }
   }
 );

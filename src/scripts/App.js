@@ -31,10 +31,16 @@ window.customElements.define(
 
       this.$app = document.getElementById('app');
       this.router = new Router(this.$app, routes, store);
+      // Закрытие окна
+      window.addEventListener('beforeunload', this.beforeunloadHandler.bind(this))
     }
 
     connectedCallback() {
       this.router.init();
+    }
+
+    beforeunloadHandler(){
+      api.send({ '@type': 'logOut' });
     }
 
     render(path) {}

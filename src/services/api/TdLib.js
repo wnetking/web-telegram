@@ -8,7 +8,7 @@ import showError from '../../utils/errors.js';
 class TdLib {
   constructor() {
     this.parameters = {
-      useTestDC: false,
+      useTestDC: true,
       readOnly: false,
       verbosity: 1,
       jsVerbosity: 3,

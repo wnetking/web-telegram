@@ -85,7 +85,7 @@ window.customElements.define(
     onSubmitHandle() {
       api.send({
         '@type': 'checkAuthenticationCode',
-        code: code || this._code
+        code: this._code
       });
     }
 

@@ -86,7 +86,9 @@ template.innerHTML = `
 export class Input extends HTMLElement {
   constructor() {
     super();
-    this._shadowRoot = this.attachShadow({ mode: 'open' });
+    this._shadowRoot = this.attachShadow({
+      mode: 'open'
+    });
     this._shadowRoot.appendChild(template.content.cloneNode(true));
 
     this.$input = this._shadowRoot.querySelector('input');
@@ -136,6 +138,10 @@ export class Input extends HTMLElement {
       this.typePasswordRendered();
     }
 
+    if (this.hasAttribute('data-error-event')) {
+      document.addEventListener(this.getAttribute('data-error-event'), this.customErrorHandle.bind(this))
+    }
+
     this.$input.addEventListener('click', this.clickHandler.bind(this))
     this.$input.addEventListener('keyup', this.keyupHandler.bind(this));
     this.$input.addEventListener('change', this.changeHandler.bind(this));
@@ -150,6 +156,16 @@ export class Input extends HTMLElement {
 
   extendConnectedCallback() {
 
+  }
+
+  customErrorHandle(e) {
+    const {
+      detail: {
+        message
+      }
+    } = e
+    this.setAttribute('has-error', true);
+    this.setAttribute('error-message', message);
   }
 
   typePasswordRendered() {
@@ -178,7 +194,10 @@ export class Input extends HTMLElement {
 
   clickHandler(e) {
     const event = new CustomEvent('click', {
-      detail: { value: e.target.value, target: e.target }
+      detail: {
+        value: e.target.value,
+        target: e.target
+      }
     });
     this.dispatchEvent(event);
   }
@@ -189,7 +208,10 @@ export class Input extends HTMLElement {
    */
   changeHandler(e) {
     const event = new CustomEvent('change', {
-      detail: { value: e.target.value, target: e.target }
+      detail: {
+        value: e.target.value,
+        target: e.target
+      }
     });
     this.dispatchEvent(event);
   }
@@ -206,7 +228,9 @@ export class Input extends HTMLElement {
     }
 
     const event = new CustomEvent('toggle-password', {
-      detail: { isPasswordShow: needShowPassword }
+      detail: {
+        isPasswordShow: needShowPassword
+      }
     });
     this.dispatchEvent(event);
   }

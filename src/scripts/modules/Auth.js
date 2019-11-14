@@ -28,7 +28,7 @@ template.innerHTML = `
     </style>
     <app-auth-section heading="${t.sign_in}" desc="${t.sign_in_desc}" img-src="./public/images/telegram.svg" >
       <app-chat-country-phone-code type="text" label="${t.country}"></app-chat-country-phone-code>
-      <app-input type="tel" value='' label="${t.phone}" pattern="^(?:\(\d{3}\)|\d{3})[- ]?\d{3}[- ]?\d{4}$"></app-input>
+      <app-input data-error-event='phone_invalid' type="tel" value='' label="${t.phone}" pattern="^(?:\(\d{3}\)|\d{3})[- ]?\d{3}[- ]?\d{4}$"></app-input>
       <app-button class="hidden">${t.phone_submit}</app-button>
     </app-auth-section>
 `;

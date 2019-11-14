@@ -8,7 +8,7 @@ import showError from '../../utils/errors.js';
 class TdLib {
   constructor() {
     this.parameters = {
-      useTestDC: true,
+      useTestDC: false,
       readOnly: false,
       verbosity: 1,
       jsVerbosity: 3,
@@ -71,6 +71,7 @@ class TdLib {
         .catch(error => {
           if (error['@type'] === 'error') {
             showError(error.message);
+            states(error);
           }
           throw error;
         });

@@ -26,10 +26,12 @@ template.innerHTML = `
           border-radius: 10px;
           outline: none !important;
           font-size: 16px;
+          caret-color: var(--focus-color);
         }
 
         input.has-error{
           border-color: var(--focus-error-color);
+          caret-color: var(--focus-error-color);
         }
 
         input.has-error:focus {

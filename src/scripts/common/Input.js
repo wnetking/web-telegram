@@ -152,6 +152,9 @@ export class Input extends HTMLElement {
     this.$input.removeEventListener('click', this.clickHandler.bind(this))
     this.$input.removeEventListener('keyup', this.keyupHandler.bind(this));
     this.$input.removeEventListener('change', this.changeHandler.bind(this));
+    if (this.hasAttribute('data-error-event')) {
+      document.removeEventListener(this.getAttribute('data-error-event'), this.customErrorHandle.bind(this))
+    }
   }
 
   extendConnectedCallback() {
@@ -166,6 +169,7 @@ export class Input extends HTMLElement {
     } = e
     this.setAttribute('has-error', true);
     this.setAttribute('error-message', message);
+    this.setErrorState();
   }
 
   typePasswordRendered() {
@@ -186,10 +190,14 @@ export class Input extends HTMLElement {
 
     if (value) {
       this.$input.classList.add('with-value');
-    } else {
-      this.$input.classList.remove('with-value');
-      this.resetErrorState();
     }
+
+    // if (value) {
+    //   this.$input.classList.add('with-value');
+    // } else {
+    //   this.$input.classList.remove('with-value');
+    //   this.resetErrorState();
+    // }
   }
 
   clickHandler(e) {
@@ -238,10 +246,11 @@ export class Input extends HTMLElement {
   setErrorState() {
     if (this.hasAttribute('has-error')) {
       this.$input.classList.add('has-error');
-
+      this.$input.classList.add('with-value');
       if (this.hasAttribute('error-message')) {
         this.$label.innerHTML = this.getAttribute('error-message');
       }
+      this.$input.focus();
     }
   }
 

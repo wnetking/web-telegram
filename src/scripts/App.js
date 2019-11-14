@@ -37,6 +37,7 @@ window.customElements.define(
 
     connectedCallback() {
       this.router.init();
+      // api.send({ '@type': 'logOut' });
     }
 
     beforeunloadHandler(){

@@ -12,7 +12,7 @@ template.innerHTML = `
         }
     </style>
     <app-auth-section heading="${t.phone}" desc="${t.code_desc}" img-src="./public/images/TwoFactorSetupMonkeyIdle.tgs" >
-      <app-input class='confirmation-code' type="text" label="${t.code}"></app-input>
+      <app-input data-error-event='phone_code_invalid' class='confirmation-code' type="text" label="${t.code}"></app-input>
     </app-auth-section>
 `;
 

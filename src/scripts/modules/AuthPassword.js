@@ -17,7 +17,7 @@ template.innerHTML = `
     }
     </style>
     <app-auth-section heading="${t.password_header}" desc="${t.password_desc}" img-src="./public/images/TwoFactorSetupMonkeyClose.tgs">
-      <app-input type="password" label="${t.password}"></app-input>
+      <app-input data-error-event="password_invalid" type="password" label="${t.password}"></app-input>
               
       <app-button>${t.phone_submit}</app-button>
     </app-auth-section>

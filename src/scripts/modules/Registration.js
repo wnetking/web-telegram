@@ -61,7 +61,7 @@ template.innerHTML = `
         </div>
       </div>
       <app-auth-section heading="${t.registration_name}" desc="${t.registration_desc}">
-        <app-input type="text" class='set-profile-name' label="${t.name}"></app-input>
+        <app-input data-error-event='emty_first_name' type="text" class='set-profile-name' label="${t.name}"></app-input>
         <app-input type="text" class='set-profile-lastname' label="${t.last_name}"></app-input>         
         <app-button class='set-profile-submit'>${t.start_messanging.toUpperCase()}</app-button>
       </app-auth-section>

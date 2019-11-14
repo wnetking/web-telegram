@@ -82,7 +82,6 @@ template.innerHTML = `
     </div>
 `;
 
-
 export class Input extends HTMLElement {
   constructor() {
     super();
@@ -136,21 +135,21 @@ export class Input extends HTMLElement {
       this.typePasswordRendered();
     }
 
-    this.$input.addEventListener('click', this.clickHandler.bind(this))
+    this.$input.addEventListener('click', this.clickHandler.bind(this));
     this.$input.addEventListener('keyup', this.keyupHandler.bind(this));
     this.$input.addEventListener('change', this.changeHandler.bind(this));
     this.extendConnectedCallback();
   }
 
   disconnectedCallback() {
-    this.$input.removeEventListener('click', this.clickHandler.bind(this))
+    this.$input.removeEventListener('click', this.clickHandler.bind(this));
     this.$input.removeEventListener('keyup', this.keyupHandler.bind(this));
     this.$input.removeEventListener('change', this.changeHandler.bind(this));
   }
 
-  extendConnectedCallback() {
+  extendConnectedCallback() {}
 
-  }
+  extendDisconnectedCallback() {}
 
   typePasswordRendered() {
     const button = document.createElement('button');
@@ -226,6 +225,4 @@ export class Input extends HTMLElement {
     this.$label.innerHTML = this.getAttribute('label');
   }
 }
-window.customElements.define(
-  'app-input', Input
-);
+window.customElements.define('app-input', Input);

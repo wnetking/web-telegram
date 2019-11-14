@@ -9,18 +9,16 @@ function chechAuthState(update) {
     updateOption(name, value);
   }
 
-
   if (update['@type'] === 'updateFile') {
     core.emmit('file.updateFile', update);
   }
-
 
   switch (update['@type']) {
     case 'updateAuthorizationState':
       switch (update.authorization_state['@type']) {
         case 'authorizationStateReady':
           a.authorizationStateReady();
-          push('#/chat');
+          push('#/auth');
           break;
         case 'authorizationStateWaitPhoneNumber':
           a.authorizationStateWaitPhoneNumber();

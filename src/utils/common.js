@@ -18,19 +18,37 @@ export function getBrowser() {
   let isIE = /*@cc_on!@*/ false || !!document.documentMode;
   let isEdge = !isIE && !!window.StyleMedia;
   if (navigator.userAgent.indexOf('Chrome') !== -1 && !isEdge) {
-      browser_name = 'Chrome';
+    browser_name = 'Chrome';
   } else if (navigator.userAgent.indexOf('Safari') !== -1 && !isEdge) {
-      browser_name = 'Safari';
+    browser_name = 'Safari';
   } else if (navigator.userAgent.indexOf('Firefox') !== -1) {
-      browser_name = 'Firefox';
+    browser_name = 'Firefox';
   } else if (navigator.userAgent.indexOf('MSIE') !== -1 || !!document.documentMode === true) {
-      //IF IE > 10
-      browser_name = 'IE';
+    //IF IE > 10
+    browser_name = 'IE';
   } else if (isEdge) {
-      browser_name = 'Edge';
+    browser_name = 'Edge';
   } else {
-      browser_name = 'Unknown';
+    browser_name = 'Unknown';
   }
 
   return browser_name;
+}
+
+export function catchPaste(evt, elem, callback) {
+  if (evt.originalEvent && evt.originalEvent.clipboardData) {
+    // OriginalEvent is a property from jQuery, normalizing the event object
+    callback(evt.originalEvent.clipboardData.getData('text'));
+  } else if (evt.clipboardData) {
+    // used in some browsers for clipboardData
+    callback(evt.clipboardData.getData('text/plain'));
+  } else if (window.clipboardData) {
+    // Older clipboardData version for Internet Explorer only
+    callback(window.clipboardData.getData('Text'));
+  } else {
+    // Last resort fallback, using a timer
+    setTimeout(function () {
+      callback(elem.value)
+    }, 100);
+  }
 }

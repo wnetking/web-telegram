@@ -20,7 +20,7 @@ function chechAuthState(update) {
       switch (update.authorization_state['@type']) {
         case 'authorizationStateReady':
           a.authorizationStateReady();
-          push('#/auth');
+          push('#/chat');
           break;
         case 'authorizationStateWaitPhoneNumber':
           a.authorizationStateWaitPhoneNumber();

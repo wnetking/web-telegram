@@ -1,5 +1,5 @@
 import { trans, api } from '../../services';
-import { push } from '../../services/router';
+import { catchPaste } from '../../utils/common';
 const t = trans('auth');
 
 const template = document.createElement('template');
@@ -26,21 +26,49 @@ window.customElements.define(
       });
       this._shadowRoot.appendChild(template.content.cloneNode(true));
       this.$input = this._shadowRoot.querySelector('.confirmation-code');
-      this.$input.addEventListener(
-        'change',
-        this.onChangeInputHanlde.bind(this)
-      );
+      this._code = null;
+
+      this.$input.addEventListener('change', this.onChangeInputHanlde.bind(this));
+
       this.$input.addEventListener('focus', this.inputFocus.bind(this));
       this.$input.addEventListener('focusout', this.inputFocusOut.bind(this));
+      this.$input.addEventListener('keydown', this.onKeydownPhoneHandler.bind(this));
+      this.$input.addEventListener('paste', this.onPasteHandle.bind(this));
+    }
+
+    disconnectedCallback() {
+      this.$input.removeEventListener('change', this.onChangeInputHanlde.bind(this));
+      this.$input.removeEventListener('focus', this.inputFocus.bind(this));
+      this.$input.removeEventListener('focusout', this.inputFocusOut.bind(this));
+      this.$input.removeEventListener('keydown', this.onKeydownPhoneHandler.bind(this));
+      this.$input.removeEventListener('paste', this.onPasteHandle.bind(this));
     }
 
     onChangeInputHanlde(e) {
       const {
         detail: { value }
       } = e;
+      this._code = value;
+    }
+
+    onKeydownPhoneHandler(e) {
+      if (e.keyCode === 13) {
+        this._code = e.target.$input.value;
+        this.onSubmitHandle();
+      }
+    }
+
+    onPasteHandle(e) {
+      catchPaste(e, this, code => {
+        this._code = code;
+        this.onSubmitHandle();
+      });
+    }
+
+    onSubmitHandle() {
       api.send({
         '@type': 'checkAuthenticationCode',
-        code: value
+        code: this._code
       });
     }
 
@@ -49,7 +77,7 @@ window.customElements.define(
       this.player = this.section.player;
     }
 
-    inputFocus(e) {
+    inputFocus() {
       const stikerPath = './public/images/TwoFactorSetupMonkeyTracking.tgs';
 
       if (this.player) {
@@ -64,7 +92,5 @@ window.customElements.define(
         this.player.setLooping(false);
       }
     }
-
-    _auth() {}
   }
 );

@@ -136,9 +136,16 @@ export class Input extends HTMLElement {
       this.typePasswordRendered();
     }
 
+    this.$input.addEventListener('click', this.clickHandler.bind(this))
     this.$input.addEventListener('keyup', this.keyupHandler.bind(this));
     this.$input.addEventListener('change', this.changeHandler.bind(this));
     this.extendConnectedCallback();
+  }
+
+  disconnectedCallback() {
+    this.$input.removeEventListener('click', this.clickHandler.bind(this))
+    this.$input.removeEventListener('keyup', this.keyupHandler.bind(this));
+    this.$input.removeEventListener('change', this.changeHandler.bind(this));
   }
 
   extendConnectedCallback() {
@@ -167,8 +174,12 @@ export class Input extends HTMLElement {
       this.$input.classList.remove('with-value');
       this.resetErrorState();
     }
+  }
 
-    var event = new KeyboardEvent('keyup', e);
+  clickHandler(e) {
+    const event = new CustomEvent('click', {
+      detail: { value: e.target.value, target: e.target }
+    });
     this.dispatchEvent(event);
   }
 

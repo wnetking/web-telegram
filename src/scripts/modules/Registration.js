@@ -35,27 +35,19 @@ template.innerHTML = `
     }
 
     .file-wrapper .file-label{
+      display: flex;
+      align-items: center;
+      justify-content: center;
       height: 160px;
       width: 160px;
       background-color: #4da3f6;
       border-radius: 50%;
-      position: relative;
       margin: 0 auto;
     }
 
-    .file-wrapper .file-label:after{
-      content: '';
-      position: absolute;
-      width: 50px;
-      height: 50px;
-      display: block;
-      background: url('./public/images/cameraadd_svg.svg') no-repeat;
-      background-size: 100%;
-      left: 0;
-      right: 0;
-      margin: auto;
-      top: 0;
-      bottom: 0;
+    .file-wrapper .file-label app-icon{
+      color: #fff;
+      font-size: 50px;
     }
 
     </style>
@@ -63,9 +55,9 @@ template.innerHTML = `
       <div class='file-wrapper'>
         <div class='section tc'>
           <app-input type="file" id='set-profile-image'></app-input>
-          <label for='set-profile-image'>
-            <div class='file-label'></div>
-          </label>
+          <div class='file-label'>
+            <app-icon icon='cameraadd_svg'></app-icon>
+          </div>
         </div>
       </div>
       <app-auth-section heading="${t.registration_name}" desc="${t.registration_desc}">
@@ -90,11 +82,15 @@ window.customElements.define(
       this.$lastname_input = this._shadowRoot.querySelector('.set-profile-lastname');
       this.$button = this._shadowRoot.querySelector('.set-profile-submit');
       this.$file_label = this._shadowRoot.querySelector('.file-label');
-      this.$file = this._shadowRoot.querySelector('#set-profile-image');
+      this.$file = this._shadowRoot.querySelector('[type="file"]');
 
       this.$name_input.addEventListener('change', this.onChangeName.bind(this));
+      this.$name_input.addEventListener('keydown', this.onKeyDownHandle.bind(this));
+
       this.$lastname_input.addEventListener('change', this.onChangeLastName.bind(this));
-      this.$button.addEventListener('click', this.onSubmitButton.bind(this));
+      this.$lastname_input.addEventListener('keydown', this.onKeyDownHandle.bind(this));
+
+      this.$button.addEventListener('click', this.onSubmitHandle.bind(this));
       this.$file_label.addEventListener('click', this.onClickLabelFile.bind(this));
 
       this.name = null;
@@ -104,7 +100,11 @@ window.customElements.define(
     disconnectedCallback() {
       this.$name_input.removeEventListener('change', this.onChangeName.bind(this));
       this.$lastname_input.removeEventListener('change', this.onChangeLastName.bind(this));
-      this.$button.removeEventListener('click', this.onSubmitButton.bind(this));
+
+      this.$lastname_input.removeEventListener('keydown', this.onKeyDownHandle.bind(this));
+      this.$name_input.addEventListener('keydown', this.onKeyDownHandle.bind(this));
+
+      this.$button.removeEventListener('click', this.onSubmitHandle.bind(this));
       this.$file_label.removeEventListener('click', this.onClickLabelFile.bind(this));
     }
 
@@ -126,12 +126,19 @@ window.customElements.define(
       this.lastName = value
     }
 
-    onClickLabelFile() {
-      console.log('click', this.$file, this.$file.click);
-      this.$file.click();
+    onKeyDownHandle(e) {
+      if (e.keyCode === 13) {
+        this.name = this.$name_input.$input.value;
+        this.lastName = this.$lastname_input.$input.value || '';
+        this.onSubmitHandle();
+      }
     }
 
-    onSubmitButton() {
+    onClickLabelFile() {
+      this.$file.$input.click();
+    }
+
+    onSubmitHandle() {
       api.send({
         '@type': 'registerUser',
         first_name: this.name,

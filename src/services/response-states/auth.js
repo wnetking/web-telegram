@@ -4,7 +4,6 @@ import * as a from '../store/actions/userInfo.js';
 import { updateOption } from '../store/actions/options';
 
 function chechAuthState(update) {
-
   if (update['@type'] === 'updateOption') {
     const { name, value } = update;
     updateOption(name, value);

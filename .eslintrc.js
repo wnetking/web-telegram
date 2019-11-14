@@ -1,27 +1,6 @@
 module.exports = {
-  parserOptions: {
-    ecmaVersion: 7,
-    sourceType: 'module',
-    ecmaFeatures: {
-      modules: true,
-      jsx: true,
-      forOf: true,
-      blockBindings: true,
-      arrowFunctions: true,
-      classes: true,
-      defaultParams: true,
-      destructuring: true,
-      generators: true,
-      restParams: true,
-      spread: true,
-      superInFunctions: true,
-      templateStrings: true,
-      experimentalObjectRestSpread: true,
-      experimentalDecorators: true
-    }
-  },
+  // extends: ['prettier'],
   rules: {
-    // 'prefer-const'               : 'warn',
     'no-var': 'warn',
     'no-const-assign': 'warn',
     'object-shorthand': 'warn',
@@ -48,15 +27,8 @@ module.exports = {
     'spaced-comment': 'warn',
     'keyword-spacing': 'warn',
     'space-infix-ops': 'warn',
-    semi: [
-      'warn',
-      'always',
-      {
-        omitLastInOneLineBlock: true
-      }
-    ],
+
     radix: 'warn',
-    // 'new-cap': 'warn',
     'comma-dangle': [
       'error',
       {
@@ -79,6 +51,6 @@ module.exports = {
     'jsx-quotes': ['warn', 'prefer-double'],
     quotes: ['warn', 'single'],
     'quote-props': ['warn', 'as-needed'],
-    'no-multi-spaces': 'warn',
+    'no-multi-spaces': 'warn'
   }
 };

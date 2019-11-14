@@ -4,8 +4,10 @@ template.innerHTML = `
     <style>
     :host {
       display: inline-flex;
-      padding: 8px;
+      padding: 10px;
       border-radius: 10px;
+      word-break: break-word;
+      line-height: 1.3;
     }
     </style>
     <div></div>

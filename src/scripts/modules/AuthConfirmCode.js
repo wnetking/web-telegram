@@ -1,13 +1,5 @@
-import {
-  trans,
-  api
-} from '../../services';
-import {
-  push
-} from '../../services/router';
-import {
-  catchPaste
-} from '../../utils/common';
+import { trans, api } from '../../services';
+import { catchPaste } from '../../utils/common';
 const t = trans('auth');
 
 const template = document.createElement('template');
@@ -36,10 +28,7 @@ window.customElements.define(
       this.$input = this._shadowRoot.querySelector('.confirmation-code');
       this._code = null;
 
-      this.$input.addEventListener(
-        'change',
-        this.onChangeInputHanlde.bind(this)
-      );
+      this.$input.addEventListener('change', this.onChangeInputHanlde.bind(this));
 
       this.$input.addEventListener('focus', this.inputFocus.bind(this));
       this.$input.addEventListener('focusout', this.inputFocusOut.bind(this));
@@ -48,11 +37,7 @@ window.customElements.define(
     }
 
     disconnectedCallback() {
-      console.log('disconnectedCallback')
-      this.$input.removeEventListener(
-        'change',
-        this.onChangeInputHanlde.bind(this)
-      );
+      this.$input.removeEventListener('change', this.onChangeInputHanlde.bind(this));
       this.$input.removeEventListener('focus', this.inputFocus.bind(this));
       this.$input.removeEventListener('focusout', this.inputFocusOut.bind(this));
       this.$input.removeEventListener('keydown', this.onKeydownPhoneHandler.bind(this));
@@ -61,9 +46,7 @@ window.customElements.define(
 
     onChangeInputHanlde(e) {
       const {
-        detail: {
-          value
-        }
+        detail: { value }
       } = e;
       this._code = value;
     }
@@ -76,7 +59,7 @@ window.customElements.define(
     }
 
     onPasteHandle(e) {
-      catchPaste(e, this, (code) => {
+      catchPaste(e, this, code => {
         this._code = code;
         this.onSubmitHandle();
       });
@@ -94,7 +77,7 @@ window.customElements.define(
       this.player = this.section.player;
     }
 
-    inputFocus(e) {
+    inputFocus() {
       const stikerPath = './public/images/TwoFactorSetupMonkeyTracking.tgs';
 
       if (this.player) {
@@ -109,7 +92,5 @@ window.customElements.define(
         this.player.setLooping(false);
       }
     }
-
-
   }
 );

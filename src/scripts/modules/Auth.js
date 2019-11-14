@@ -13,9 +13,13 @@ const template = document.createElement('template');
 
 template.innerHTML = `
     <style>
-        app-input, app-button{
+        app-chat-country-phone-code, app-input, app-button{
           width: 100%;
           margin-bottom: 25px;
+        }
+
+        app-chat-country-phone-code{
+          z-index: 2;
         }
 
         .hidden {
@@ -23,7 +27,7 @@ template.innerHTML = `
         }
     </style>
     <app-auth-section heading="${t.sign_in}" desc="${t.sign_in_desc}" img-src="./public/images/telegram.svg" >
-      <app-input type="text" label="${t.country}"></app-input>
+      <app-chat-country-phone-code type="text" label="${t.country}"></app-chat-country-phone-code>
       <app-input type="tel" value='' label="${t.phone}" pattern="^(?:\(\d{3}\)|\d{3})[- ]?\d{3}[- ]?\d{4}$"></app-input>
       <app-button class="hidden">${t.phone_submit}</app-button>
     </app-auth-section>
@@ -35,12 +39,13 @@ window.customElements.define(
     constructor() {
       super();
       this._shadowRoot = this.attachShadow({
-        mode: 'open'
+        mode: 'open',
       });
       this._shadowRoot.appendChild(template.content.cloneNode(true));
 
       this.$submitButton = this._shadowRoot.querySelector('app-button');
       this.$inputPhone = this._shadowRoot.querySelector('[type=tel]');
+      this.$country = this._shadowRoot.querySelector('app-chat-country-phone-code');
 
       this.$submitButton.addEventListener(
         'click',
@@ -57,7 +62,17 @@ window.customElements.define(
         this.onKeydownPhoneHandler.bind(this)
       );
 
+
       this.telephone = '';
+    }
+
+    connectedCallback() {
+      this.$country.addEventListener('dropdown.change', ({ detail }) => {
+        this.$inputPhone.$input.value = `+${detail.dialCode}`;
+        this.$inputPhone.keyupHandler({
+          target: this.$inputPhone.$input,
+        });
+      });
     }
 
     onKeydownPhoneHandler(e) {
@@ -85,7 +100,7 @@ window.customElements.define(
       this.$submitButton.setAttribute('is-loading', null);
       api.send({
         '@type': 'setAuthenticationPhoneNumber',
-        phone_number: this.telephone
+        phone_number: this.telephone,
       });
     }
   }

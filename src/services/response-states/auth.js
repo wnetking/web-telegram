@@ -4,7 +4,6 @@ import * as a from '../store/actions/userInfo.js';
 import { updateOption } from '../store/actions/options';
 
 function chechAuthState(update) {
-
   if (update['@type'] === 'updateOption') {
     const { name, value } = update;
     updateOption(name, value);
@@ -21,7 +20,7 @@ function chechAuthState(update) {
       switch (update.authorization_state['@type']) {
         case 'authorizationStateReady':
           a.authorizationStateReady();
-          push('#/chat');
+          push('#/auth');
           break;
         case 'authorizationStateWaitPhoneNumber':
           a.authorizationStateWaitPhoneNumber();

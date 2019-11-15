@@ -1,6 +1,10 @@
 import { trans, api } from '../../services';
 import { catchPaste } from '../../utils/common';
+import store from '../../services/store/';
 const t = trans('auth');
+
+const state = store.getState();
+
 
 const template = document.createElement('template');
 
@@ -34,6 +38,8 @@ window.customElements.define(
       this.$input.addEventListener('focusout', this.inputFocusOut.bind(this));
       this.$input.addEventListener('keydown', this.onKeydownPhoneHandler.bind(this));
       this.$input.addEventListener('paste', this.onPasteHandle.bind(this));
+
+      console.log(state.userInfo.temporaryPhone);
     }
 
     disconnectedCallback() {

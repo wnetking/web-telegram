@@ -35,3 +35,11 @@ export const authorizationStateWaitPassword = bindActionCreators(
   }),
   dispatch
 );
+
+export const setTemploaryPhone = bindActionCreators(
+  (phone) => ({
+    type: 'auth.setTemploaryPhone',
+    payload : phone
+  }),
+  dispatch
+)

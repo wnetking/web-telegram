@@ -8,6 +8,7 @@ import {
   api
 } from '../../services';
 const t = trans('auth');
+import {setTemploaryPhone} from '../../services/store/actions/userInfo';
 
 const template = document.createElement('template');
 
@@ -120,6 +121,7 @@ window.customElements.define(
         return false;
       }
       this.$submitButton.setAttribute('is-loading', null);
+      setTemploaryPhone(this.telephone);
       api.send({
         '@type': 'setAuthenticationPhoneNumber',
         phone_number: this.telephone,

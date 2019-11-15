@@ -1,3 +1,5 @@
+import Element from './Element';
+
 class Core {
   /**
    * @param {*} eventName
@@ -33,8 +35,24 @@ class Core {
       el.removeEventListener(eventName, handler);
     }
   }
+
+  /**
+   * @description wrapper ow native window.customElements.define
+   * @memberof Core
+   */
+  define(name, Class, options = {}) {
+    window.customElements.define(name, Class, options = {})
+  }
+
+  /**
+   * @description wrapper ow native window.customElements.whenDefined
+   * @memberof Core
+   */
+  whenDefined(name) {
+    return window.customElements.whenDefined(name);
+  }
 }
 
 const core = new Core();
-
+export { Element }
 export default core;

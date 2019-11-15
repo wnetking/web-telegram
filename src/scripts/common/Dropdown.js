@@ -1,5 +1,5 @@
 import { Input } from './Input';
-import core from '../../services/api/core';
+import core, { Element } from '../../services/api/core';
 
 let cacheData = null;
 
@@ -68,7 +68,7 @@ const triggerTmp = `
   <button class="trigger-btn"><app-icon icon="down_svg"></app-icon></button>
 `;
 
-window.customElements.define(
+core.define(
   'app-chat-country-phone-code',
   class extends Input {
     constructor() {
@@ -87,6 +87,7 @@ window.customElements.define(
       this.$triggerBtn = this._shadowRoot.querySelector('.trigger-btn');
       this.$dropDownWrap = this._shadowRoot.querySelector('.drop-down-wrap');
       core.on('click', this.onTriggerClick, this.$triggerBtn);
+      core.on('focus', this.toggle, this.$input);
       core.on('focus', this.toggle, this.$input);
       core.on('keyup', this.onKeyup, this.$input);
       core.on('focusout', this.onFocusout, this.$input);
@@ -125,7 +126,7 @@ window.customElements.define(
       core.emmit('dropdown.change', item, this);
     }
 
-    load(callback = () => {}) {
+    load(callback = () => { }) {
       import('./country_data').then(({ default: data }) => {
         cacheData = data;
         callback();
@@ -205,14 +206,14 @@ tm.innerHTML = `
 </style>
 <div></div>
 `;
-window.customElements.define(
+core.define(
   'app-chat-country-phone-code-item',
-  class extends HTMLElement {
+  class extends Element {
     constructor() {
       super();
-      this.$shadow = this.attachShadow({ mode: 'open' });
-      this.$shadow.appendChild(tm.content.cloneNode(true));
-      this.$wrap = this.$shadow.querySelector('div');
+      this.makeShadow(tm);
+
+      this.$wrap = this.shadow.$('div');
       this.dropdowKeyDownH = this.dropdowKeyDownH.bind(this);
       this.onClick = this.onClick.bind(this);
       this.onSelect = null;

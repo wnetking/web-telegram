@@ -1,12 +1,9 @@
-import { trans, api } from '../../services';
-import { catchPaste } from '../../utils/common';
-import store from '../../services/store/';
-const t = trans('auth');
+import { trans, api } from "../../services";
+import { catchPaste } from "../../utils/common";
+import store from "../../services/store/";
+const t = trans("auth");
 
-const state = store.getState();
-
-
-const template = document.createElement('template');
+const template = document.createElement("template");
 
 template.innerHTML = `
     <style>
@@ -21,33 +18,57 @@ template.innerHTML = `
 `;
 
 window.customElements.define(
-  'app-auth-code-confirm',
+  "app-auth-code-confirm",
   class extends HTMLElement {
     constructor() {
       super();
       this._shadowRoot = this.attachShadow({
-        mode: 'open'
+        mode: "open"
       });
+
       this._shadowRoot.appendChild(template.content.cloneNode(true));
-      this.$input = this._shadowRoot.querySelector('.confirmation-code');
+      this.$input = this._shadowRoot.querySelector(".confirmation-code");
+      this.$authSection = this._shadowRoot.querySelector("app-auth-section");
       this._code = null;
 
-      this.$input.addEventListener('change', this.onChangeInputHanlde.bind(this));
+      this.$input.addEventListener(
+        "change",
+        this.onChangeInputHanlde.bind(this)
+      );
 
-      this.$input.addEventListener('focus', this.inputFocus.bind(this));
-      this.$input.addEventListener('focusout', this.inputFocusOut.bind(this));
-      this.$input.addEventListener('keydown', this.onKeydownPhoneHandler.bind(this));
-      this.$input.addEventListener('paste', this.onPasteHandle.bind(this));
+      this.$input.addEventListener("focus", this.inputFocus.bind(this));
+      this.$input.addEventListener("focusout", this.inputFocusOut.bind(this));
+      this.$input.addEventListener(
+        "keydown",
+        this.onKeydownPhoneHandler.bind(this)
+      );
+      this.$input.addEventListener("paste", this.onPasteHandle.bind(this));
+    }
 
-      console.log(state.userInfo.temporaryPhone);
+    connectedCallback() {
+      const { userInfo } = store.getState();
+      this.section = this._shadowRoot.querySelector("app-auth-section");
+      this.player = this.section.player;
+
+      console.log(this.$authSection.setAttribute('heading', userInfo.temploaryPhone));
     }
 
     disconnectedCallback() {
-      this.$input.removeEventListener('change', this.onChangeInputHanlde.bind(this));
-      this.$input.removeEventListener('focus', this.inputFocus.bind(this));
-      this.$input.removeEventListener('focusout', this.inputFocusOut.bind(this));
-      this.$input.removeEventListener('keydown', this.onKeydownPhoneHandler.bind(this));
-      this.$input.removeEventListener('paste', this.onPasteHandle.bind(this));
+      this.$input.removeEventListener(
+        "change",
+        this.onChangeInputHanlde.bind(this)
+      );
+      this.$input.removeEventListener("focus", this.inputFocus.bind(this));
+      this.$input.removeEventListener(
+        "focusout",
+        this.inputFocusOut.bind(this)
+      );
+      this.$input.removeEventListener(
+        "keydown",
+        this.onKeydownPhoneHandler.bind(this)
+      );
+      this.$input.removeEventListener("paste", this.onPasteHandle.bind(this));
+      
     }
 
     onChangeInputHanlde(e) {
@@ -72,23 +93,18 @@ window.customElements.define(
     }
 
     onSubmitHandle() {
-      if(String(this._code).length < 1){
+      if (String(this._code).length < 1) {
         this.$input.$input.focus();
         return false;
       }
       api.send({
-        '@type': 'checkAuthenticationCode',
+        "@type": "checkAuthenticationCode",
         code: this._code
       });
     }
 
-    connectedCallback() {
-      this.section = this._shadowRoot.querySelector('app-auth-section');
-      this.player = this.section.player;
-    }
-
     inputFocus() {
-      const stikerPath = './public/images/TwoFactorSetupMonkeyTracking.tgs';
+      const stikerPath = "./public/images/TwoFactorSetupMonkeyTracking.tgs";
 
       if (this.player) {
         this.player.load(stikerPath);
@@ -98,7 +114,7 @@ window.customElements.define(
 
     inputFocusOut(e) {
       if (this.player) {
-        this.player.load(this.section.getAttribute('img-src'));
+        this.player.load(this.section.getAttribute("img-src"));
         this.player.setLooping(false);
       }
     }

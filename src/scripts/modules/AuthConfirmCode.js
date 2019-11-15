@@ -1,74 +1,60 @@
 import { trans, api } from "../../services";
 import { catchPaste } from "../../utils/common";
+import core, { Element } from '../../services/api/core';
 import store from "../../services/store/";
+
 const t = trans("auth");
-
 const template = document.createElement("template");
-
 template.innerHTML = `
-  <style>
-      app-input, button{
-        width: 100%;
-        margin-bottom: 25px;
-      }
-  </style>
-  <app-auth-section heading="${t.phone}" desc="${t.code_desc}" img-src="./public/images/TwoFactorSetupMonkeyIdle.tgs" >
-    <app-input data-error-event='phone_code_invalid' class='confirmation-code' type="text" label="${t.code}"></app-input>
-  </app-auth-section>
+<style>
+  app-input, button{
+    width: 100%;
+    margin-bottom: 25px;
+  }
+</style>
+<app-auth-section heading="${t.phone}" desc="${t.code_desc}" img-src="./public/images/TwoFactorSetupMonkeyIdle.tgs" >
+  <app-input data-error-event='phone_code_invalid' class='confirmation-code' type="text" label="${t.code}"></app-input>
+</app-auth-section>
 `;
 
-window.customElements.define(
+core.define(
   "app-auth-code-confirm",
-  class extends HTMLElement {
+  class extends Element {
     constructor() {
       super();
-      this._shadowRoot = this.attachShadow({
-        mode: "open"
-      });
+      this.makeShadow(template);
+      this.$input = this.shadow.$(".confirmation-code");
+      this.$authSection = this.shadow.$("app-auth-section");
 
-      this._shadowRoot.appendChild(template.content.cloneNode(true));
-      this.$input = this._shadowRoot.querySelector(".confirmation-code");
-      this.$authSection = this._shadowRoot.querySelector("app-auth-section");
       this._code = null;
 
-      this.$input.addEventListener(
-        "change",
-        this.onChangeInputHanlde.bind(this)
-      );
-
-      this.$input.addEventListener("focus", this.inputFocus.bind(this));
-      this.$input.addEventListener("focusout", this.inputFocusOut.bind(this));
-      this.$input.addEventListener(
-        "keydown",
-        this.onKeydownPhoneHandler.bind(this)
-      );
-      this.$input.addEventListener("paste", this.onPasteHandle.bind(this));
+      this.onChangeInputHanlde = this.onChangeInputHanlde.bind(this);
+      this.inputFocus = this.inputFocus.bind(this);
+      this.inputFocusOut = this.inputFocusOut.bind(this);
+      this.onKeydownPhoneHandler = this.onKeydownPhoneHandler.bind(this);
+      this.onPasteHandle = this.onPasteHandle.bind(this);
     }
 
     connectedCallback() {
       const { userInfo } = store.getState();
-      this.section = this._shadowRoot.querySelector("app-auth-section");
+      this.section = this.shadow.$("app-auth-section");
       this.player = this.section.player;
+      this.$authSection.setAttribute('heading', userInfo.temploaryPhone);
 
-      console.log(this.$authSection.setAttribute('heading', userInfo.temploaryPhone));
+      core.on("change", this.onChangeInputHanlde, this.$input);
+      core.on("focus", this.onChangeInputHanlde, this.$input);
+      core.on("focusout", this.inputFocusOut, this.$input);
+      core.on("keydown", this.onKeydownPhoneHandler, this.$input);
+      core.on("paste", this.onKeydownPhoneHandler, this.$input);
     }
 
     disconnectedCallback() {
-      this.$input.removeEventListener(
-        "change",
-        this.onChangeInputHanlde.bind(this)
-      );
-      this.$input.removeEventListener("focus", this.inputFocus.bind(this));
-      this.$input.removeEventListener(
-        "focusout",
-        this.inputFocusOut.bind(this)
-      );
-      this.$input.removeEventListener(
-        "keydown",
-        this.onKeydownPhoneHandler.bind(this)
-      );
-      this.$input.removeEventListener("paste", this.onPasteHandle.bind(this));
-      
+      core.off("change", this.onChangeInputHanlde, this.$input);
+      core.off("focus", this.onChangeInputHanlde, this.$input);
+      core.off("focusout", this.inputFocusOut, this.$input);
+      core.off("keydown", this.onKeydownPhoneHandler, this.$input);
+      core.off("paste", this.onKeydownPhoneHandler, this.$input);
+
     }
 
     onChangeInputHanlde(e) {
@@ -97,6 +83,7 @@ window.customElements.define(
         this.$input.$input.focus();
         return false;
       }
+
       api.send({
         "@type": "checkAuthenticationCode",
         code: this._code

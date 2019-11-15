@@ -18,7 +18,7 @@ template.innerHTML = `
 
 
   .container {
-    display: block;
+    display: inline-block;
     position: relative;
     cursor: pointer;
     font-size: 16px;
@@ -118,7 +118,7 @@ core.define(
 
     attributeChangedCallback(name, oldVal, newVal) {
       if (name === 'is-checked' && oldVal !== newVal) {
-        this.setAttributeForCheckox(newVal)
+        this.setAttributesForCheckox(newVal)
       }
     }
 

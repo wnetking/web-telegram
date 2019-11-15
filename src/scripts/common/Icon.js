@@ -1,31 +1,31 @@
+import core, { Element } from '../../services/api/core';
+
 const template = document.createElement('template');
-
 template.innerHTML = `
-    <style>
-      :host {
-        display: inline-flex;
-      }
+<style>
+  :host {
+    display: inline-flex;
+  }
 
-      .icon{
-        display: inline-block;
-        width: 1em;
-        height: 1em;
-        stroke-width: 0;
-        stroke: currentColor;
-        fill: currentColor;
-      }
-    </style>
-    <svg class="icon "><use xlink:href="#icon_chevron_down"></use></svg>
+  .icon{
+    display: inline-block;
+    width: 1em;
+    height: 1em;
+    stroke-width: 0;
+    stroke: currentColor;
+    fill: currentColor;
+  }
+</style>
+<svg class="icon "><use xlink:href="#icon_chevron_down"></use></svg>
 `;
 
-window.customElements.define(
+core.define(
   'app-icon',
-  class extends HTMLElement {
+  class extends Element {
     constructor() {
       super();
-      this._shadowRoot = this.attachShadow({ mode: 'open' });
-      this._shadowRoot.appendChild(template.content.cloneNode(true));
-      this.$wrap = this._shadowRoot.querySelector('use');
+      this.makeShadow(template);
+      this.$wrap = this.shadow.$('use');
     }
 
     connectedCallback() {

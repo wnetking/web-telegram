@@ -13,12 +13,13 @@ function chechAuthState(update) {
     core.emmit('file.updateFile', update);
   }
 
+  console.log(update);
   switch (update['@type']) {
     case 'updateAuthorizationState':
       switch (update.authorization_state['@type']) {
         case 'authorizationStateReady':
           a.authorizationStateReady();
-          push('#/auth');
+          push('#/chat');
           break;
         case 'authorizationStateWaitPhoneNumber':
           a.authorizationStateWaitPhoneNumber();

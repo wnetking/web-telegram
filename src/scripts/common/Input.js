@@ -1,93 +1,95 @@
 const template = document.createElement('template');
 
 template.innerHTML = `
-    <style>
-        :host {
-            display: inline-block;
-            font-family: sans-serif;
+<style>
+  :host {
+      display: inline-block;
+      font-family: sans-serif;
 
-            --focus-color: #4da3f6;
-            --focus-error-color: #e54035;
-          }
-        * {
-          box-sizing: border-box;
-        }
+      --focus-color: #4da3f6;
+      --focus-error-color: #e54035;
+    }
+  * {
+    box-sizing: border-box;
+  }
 
-        .input-wrap{
-          position: relative;
-        }
+  .input-wrap{
+    position: relative;
+  }
 
-        input {
-          box-sizing: border-box;
-          display: inline-block;
-          width: 100%;
-          padding: 17px 18px;
-          border: 1px solid #e6e7ea;
-          border-radius: 10px;
-          outline: none !important;
-          font-size: 16px;
-          caret-color: var(--focus-color);
-        }
+  input {
+    box-sizing: border-box;
+    display: inline-block;
+    width: 100%;
+    padding: 17px 18px;
+    border: 1px solid #e6e7ea;
+    border-radius: 10px;
+    outline: none !important;
+    font-size: 16px;
+    caret-color: var(--focus-color);
+  }
 
-        input.has-error{
-          border-color: var(--focus-error-color);
-          caret-color: var(--focus-error-color);
-        }
+  input.has-error{
+    border-color: var(--focus-error-color);
+    caret-color: var(--focus-error-color);
+  }
 
-        input.has-error:focus {
-          border: 1px solid var(--focus-error-color);
-          box-shadow: 0 0 0 1px var(--focus-error-color);
-        }
+  input.has-error:focus {
+    border: 1px solid var(--focus-error-color);
+    box-shadow: 0 0 0 1px var(--focus-error-color);
+  }
 
-        input:focus {
-          border: 1px solid var(--focus-color);
-          box-shadow: 0 0 0 1px var(--focus-color);
-        }
-        
-        label {
-          position:absolute;
-          top: 50%;
-          left: 20px;
-          transform: translateY(-50%);
-          transition: all 0.1s ease-out; 
-          color: #b0b9c0;
-          background-color:#fff;
-        }
+  input:focus {
+    border: 1px solid var(--focus-color);
+    box-shadow: 0 0 0 1px var(--focus-color);
+  }
+  
+  label {
+    position:absolute;
+    top: 50%;
+    left: 20px;
+    transform: translateY(-50%);
+    transition: all 0.1s ease-out; 
+    color: #b0b9c0;
+    background-color:#fff;
+  }
 
-        input.with-value + label {
-          font-size: 12px;
-          top: 0px;
-          transform: translateY(-50%);
-          padding: 0 5px;
-          color: var(--focus-color);
-        }
-        button{
-          position:absolute;
-          top: 50%;
-          right: 10px;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          transform: translateY(-50%);
-          background: transparent;
-          border: none;
-          font-size:23px;
-          outline: none;  
-        }
-        input.with-value.has-error + label {
-          color: var(--focus-error-color);
-        }
-    </style>
-    <div class="input-wrap">
-      <input type="text" id="my-input"/>
-      <label for="my-input"></label>
-    </div>
+  input.with-value + label {
+    font-size: 12px;
+    top: 0px;
+    transform: translateY(-50%);
+    padding: 0 5px;
+    color: var(--focus-color);
+  }
+  button{
+    position:absolute;
+    top: 50%;
+    right: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transform: translateY(-50%);
+    background: transparent;
+    border: none;
+    font-size:23px;
+    outline: none;  
+  }
+  input.with-value.has-error + label {
+    color: var(--focus-error-color);
+  }
+</style>
+<div class="input-wrap">
+  <input type="text" id="my-input"/>
+  <label for="my-input"></label>
+</div>
 `;
 
 export class Input extends HTMLElement {
   constructor() {
     super();
-    this._shadowRoot = this.attachShadow({ mode: 'open' });
+    this._shadowRoot = this.attachShadow({
+      mode: 'open'
+    });
     this._shadowRoot.appendChild(template.content.cloneNode(true));
 
     this.$input = this._shadowRoot.querySelector('input');
@@ -140,6 +142,11 @@ export class Input extends HTMLElement {
     this.$input.addEventListener('click', this.clickHandler.bind(this));
     this.$input.addEventListener('keyup', this.keyupHandler.bind(this));
     this.$input.addEventListener('change', this.changeHandler.bind(this));
+
+    if (this.hasAttribute('data-error-event')) {
+      document.addEventListener(this.getAttribute('data-error-event'), this.customErrorHandle.bind(this))
+    }
+
     this.extendConnectedCallback();
   }
 
@@ -147,11 +154,25 @@ export class Input extends HTMLElement {
     this.$input.removeEventListener('click', this.clickHandler.bind(this));
     this.$input.removeEventListener('keyup', this.keyupHandler.bind(this));
     this.$input.removeEventListener('change', this.changeHandler.bind(this));
+    if (this.hasAttribute('data-error-event')) {
+      document.removeEventListener(this.getAttribute('data-error-event'), this.customErrorHandle.bind(this))
+    }
   }
 
-  extendConnectedCallback() {}
+  extendConnectedCallback() { }
 
-  extendDisconnectedCallback() {}
+  extendDisconnectedCallback() { }
+
+  customErrorHandle(e) {
+    const {
+      detail: {
+        message
+      }
+    } = e
+    this.setAttribute('has-error', true);
+    this.setAttribute('error-message', message);
+    this.setErrorState();
+  }
 
   typePasswordRendered() {
     const button = document.createElement('button');
@@ -179,7 +200,10 @@ export class Input extends HTMLElement {
 
   clickHandler(e) {
     const event = new CustomEvent('click', {
-      detail: { value: e.target.value, target: e.target }
+      detail: {
+        value: e.target.value,
+        target: e.target
+      }
     });
     this.dispatchEvent(event);
   }
@@ -190,7 +214,10 @@ export class Input extends HTMLElement {
    */
   changeHandler(e) {
     const event = new CustomEvent('change', {
-      detail: { value: e.target.value, target: e.target }
+      detail: {
+        value: e.target.value,
+        target: e.target
+      }
     });
     this.dispatchEvent(event);
   }
@@ -207,7 +234,9 @@ export class Input extends HTMLElement {
     }
 
     const event = new CustomEvent('toggle-password', {
-      detail: { isPasswordShow: needShowPassword }
+      detail: {
+        isPasswordShow: needShowPassword
+      }
     });
     this.dispatchEvent(event);
   }
@@ -215,7 +244,6 @@ export class Input extends HTMLElement {
   setErrorState() {
     if (this.hasAttribute('has-error')) {
       this.$input.classList.add('has-error');
-
       if (this.hasAttribute('error-message')) {
         this.$label.innerHTML = this.getAttribute('error-message');
       }

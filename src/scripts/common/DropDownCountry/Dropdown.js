@@ -1,5 +1,5 @@
-import { Input } from './Input';
-import core, { Element } from '../../services/api/core';
+import { Input } from '../Input';
+import core, { Element } from '../../../services/api/core';
 
 let cacheData = null;
 

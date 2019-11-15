@@ -1,19 +1,23 @@
 import { trans, api } from '../../services';
 import { catchPaste } from '../../utils/common';
+import store from '../../services/store/';
 const t = trans('auth');
+
+const state = store.getState();
+
 
 const template = document.createElement('template');
 
 template.innerHTML = `
-    <style>
-        app-input, button{
-          width: 100%;
-          margin-bottom: 25px;
-        }
-    </style>
-    <app-auth-section heading="${t.phone}" desc="${t.code_desc}" img-src="./public/images/TwoFactorSetupMonkeyIdle.tgs" >
-      <app-input class='confirmation-code' type="text" label="${t.code}"></app-input>
-    </app-auth-section>
+  <style>
+      app-input, button{
+        width: 100%;
+        margin-bottom: 25px;
+      }
+  </style>
+  <app-auth-section heading="${t.phone}" desc="${t.code_desc}" img-src="./public/images/TwoFactorSetupMonkeyIdle.tgs" >
+    <app-input data-error-event='phone_code_invalid' class='confirmation-code' type="text" label="${t.code}"></app-input>
+  </app-auth-section>
 `;
 
 window.customElements.define(
@@ -34,6 +38,8 @@ window.customElements.define(
       this.$input.addEventListener('focusout', this.inputFocusOut.bind(this));
       this.$input.addEventListener('keydown', this.onKeydownPhoneHandler.bind(this));
       this.$input.addEventListener('paste', this.onPasteHandle.bind(this));
+
+      console.log(state.userInfo.temporaryPhone);
     }
 
     disconnectedCallback() {
@@ -48,12 +54,12 @@ window.customElements.define(
       const {
         detail: { value }
       } = e;
-      this._code = value;
+      this._code = String(value);
     }
 
     onKeydownPhoneHandler(e) {
       if (e.keyCode === 13) {
-        this._code = e.target.$input.value;
+        this._code = String(e.target.$input.value);
         this.onSubmitHandle();
       }
     }
@@ -66,6 +72,10 @@ window.customElements.define(
     }
 
     onSubmitHandle() {
+      if (String(this._code).length < 1) {
+        this.$input.$input.focus();
+        return false;
+      }
       api.send({
         '@type': 'checkAuthenticationCode',
         code: this._code

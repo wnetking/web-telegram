@@ -71,6 +71,7 @@ class TdLib {
         .catch(error => {
           if (error['@type'] === 'error') {
             showError(error.message);
+            states(error);
           }
           throw error;
         });

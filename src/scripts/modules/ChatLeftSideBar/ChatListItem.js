@@ -1,111 +1,106 @@
 import * as a from '../../../services/store/actions/chatActions';
+import core, { Element } from '../../../services/api/core';
 import './LastMessage';
 import './ChatThumb';
 
 const template = document.createElement('template');
-
 template.innerHTML = `
-    <style>
-    :host {
-      position: relative; 
+<style>
+  :host {
+    position: relative; 
 
-      --size: 75px;
-    }
+    --size: 75px;
+  }
 
-    * {
-      box-sizing: border-box;
-    }
+  * {
+    box-sizing: border-box;
+  }
 
-    .wrap{
-      display: flex;
-      overflow: hidden;
-      position: relative;
-      box-sizing: border-box;
-      border: none;
-      border-radius: 10px;
-      cursor: pointer;
-      transition:background-color 0.2s ease-out;
-      margin-left: 7px;
-      margin-right: 7px;
-    }
+  .wrap{
+    display: flex;
+    overflow: hidden;
+    position: relative;
+    box-sizing: border-box;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    transition:background-color 0.2s ease-out;
+    margin-left: 7px;
+    margin-right: 7px;
+  }
 
-    .wrap:hover, .wrap.active{
-      background-color: #f4f4f5;
-    }
+  .wrap:hover, .wrap.active{
+    background-color: #f4f4f5;
+  }
 
-    .ripple{
-      z-index: 1;
-      position: absolute;
-      background-color: #e9e9eb;
-      border-radius: 50%;
-      width: 25px;
-      height: 25px;
-      transition: transform 0.2s ease-out;
-    }
+  .ripple{
+    z-index: 1;
+    position: absolute;
+    background-color: #e9e9eb;
+    border-radius: 50%;
+    width: 25px;
+    height: 25px;
+    transition: transform 0.2s ease-out;
+  }
 
-    .ripple.run{
-      transform: scale(30);
-    }
+  .ripple.run{
+    transform: scale(30);
+  }
 
-    .thumb, .details{
-      z-index: 2;
-      position: relative;
-    }
+  .thumb, .details{
+    z-index: 2;
+    position: relative;
+  }
 
-    .thumb{
-      flex-basis: var(--size);
-      max-width: var(--size);
-      padding: 10px;
-    }
+  .thumb{
+    flex-basis: var(--size);
+    max-width: var(--size);
+    padding: 10px;
+  }
 
-    img {
-      max-width: 100%;
-      border-radius: 50%;
-    }
+  img {
+    max-width: 100%;
+    border-radius: 50%;
+  }
 
-    h3 {
-      font-size: 15px;
-      margin-top: 17px;
-      margin-bottom: 7px;
-    }
+  h3 {
+    font-size: 15px;
+    margin-top: 17px;
+    margin-bottom: 7px;
+  }
 
-    .details {
-      flex-basis: calc(100% - var(--size)); 
-      max-width: calc(100% - var(--size)); 
-    }
+  .details {
+    flex-basis: calc(100% - var(--size)); 
+    max-width: calc(100% - var(--size)); 
+  }
 
-    .details span, app-chat-item-last-message{
-      display: inline-block;
-      overflow: hidden;
-      max-width: 100%;
-      white-space: nowrap;
-      text-overflow: ellipsis;
-      color: #989b9e;
-    }
-    </style>
-    <div class="wrap"></div>
+  .details span, app-chat-item-last-message{
+    display: inline-block;
+    overflow: hidden;
+    max-width: 100%;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    color: #989b9e;
+  }
+</style>
+<div class="wrap"></div>
 `;
 
-window.customElements.define(
+core.define(
   'app-chat-left-list-item',
-  class extends AppElement {
+  class extends Element {
     constructor() {
       super();
-      this._shadowRoot = this.attachShadow({ mode: 'open' });
-      this._shadowRoot.appendChild(template.content.cloneNode(true));
+      this.makeShadow(template)
       this._data;
-      this.$wrap = this._shadowRoot.querySelector('.wrap');
+      this.$wrap = this.shadow.$('.wrap');
       this.onWrapClickHandler = this.onWrapClickHandler.bind(this);
-
-      this.$wrap.addEventListener('click', this.onWrapClickHandler);
       this.setChatHistoryToStoreHandler = this.setChatHistoryToStoreHandler.bind(
         this
       );
 
-      document.addEventListener(
-        'chat.setChatHistoryToStore',
-        this.setChatHistoryToStoreHandler
-      );
+      this.$wrap.addEventListener('click', this.onWrapClickHandler);
+      code.on('chat.setChatHistoryToStore', this.setChatHistoryToStoreHandler);
     }
 
     setChatHistoryToStoreHandler({ detail }) {
@@ -130,10 +125,7 @@ window.customElements.define(
 
     disconnectedCallback() {
       this.$wrap.removeEventListener('click', this.onWrapClickHandler);
-      document.removeEventListener(
-        'chat.setChatHistoryToStore',
-        this.setChatHistoryToStoreHandler
-      );
+      core.off('chat.setChatHistoryToStore', this.setChatHistoryToStoreHandler);
     }
 
     static get observedAttributes() {
@@ -173,13 +165,10 @@ window.customElements.define(
 
     set data(value) {
       this._data = value;
-      this.setAttribute('updateKey', 'ne key');
     }
 
     setLastMessage() {
-      const lastMessageNode = this._shadowRoot.querySelector(
-        'app-chat-item-last-message'
-      );
+      const lastMessageNode = this.shadow.$('app-chat-item-last-message');
       lastMessageNode.message = this._data.last_message;
     }
 

@@ -4,6 +4,7 @@ const initialState = {
   authWaitCode: false,
   authWaitPassword: false,
   authHasErrors: false,
+  temporaryPhone : null
 };
 
 module.exports = function (state = initialState, action) {
@@ -38,6 +39,12 @@ module.exports = function (state = initialState, action) {
       return {
         ...state,
         authWaitPassword: true
+      }
+
+    case 'auth.setTemploaryPhone':
+      return {
+        ...state,
+        temporaryPhone : action.payload
       }
 
     default:

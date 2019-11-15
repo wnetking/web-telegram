@@ -1,50 +1,50 @@
 import { trans } from '../../services';
-const t = trans('core');
+import core, { Element } from '../../services/api/core';
 
+const t = trans('core');
 const template = document.createElement('template');
 
 template.innerHTML = `
-    <style>
-    :host {
-      display: inline-flex;
+<style>
+  :host {
+    display: inline-flex;
+  }
+  span {
+    display: inline-block;
+    pointer-events: none;
+    width: 23px;
+    height: 23px;
+    border: 2px solid transparent;
+    border-color: #eee;
+    border-top-color: transparent;
+    border-radius: 50%;
+    animation: loadingspin 1s linear infinite;
+  }
+
+  span.big{
+    width: 40px;
+    height: 40px;
+    border-color: #4da3f6;
+    border-top-color: transparent;
+    border-width: 3px;
+  }
+
+  @keyframes loadingspin {
+    100% {
+        transform: rotate(360deg)
     }
-    span {
-      display: inline-block;
-      pointer-events: none;
-      width: 23px;
-      height: 23px;
-      border: 2px solid transparent;
-      border-color: #eee;
-      border-top-color: transparent;
-      border-radius: 50%;
-      animation: loadingspin 1s linear infinite;
-    }
-    
-    span.big{
-      width: 40px;
-      height: 40px;
-      border-color: #4da3f6;
-      border-top-color: transparent;
-      border-width: 3px;
-    }
-    
-    @keyframes loadingspin {
-      100% {
-          transform: rotate(360deg)
-      }
-    }
-    </style>
-    <span></span>
+  }
+</style>
+<span></span>
 `;
 
-window.customElements.define(
+core.define(
   'app-loader',
-  class extends HTMLElement {
+  class extends Element {
     constructor() {
-      super(); // always call super() first in the constructor.
-      this._shadowRoot = this.attachShadow({ mode: 'open' });
-      this._shadowRoot.appendChild(template.content.cloneNode(true));
-      this.$span = this._shadowRoot.querySelector('span');
+      super();
+      this.makeShadow(template);
+      this.$span = this.shadow.$('span');
 
       if (this.hasAttribute('big')) {
         this.$span.classList.add('big');

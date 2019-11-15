@@ -1,20 +1,15 @@
 import { getMessage } from '../../../utils/getMessage';
+import core, { Element } from '../../../services/api/core';
+
 const template = document.createElement('template');
+template.innerHTML = ``;
 
-template.innerHTML = `
-    <style>
-    :host {
-    }
-    </style>
-`;
-
-window.customElements.define(
+core.define(
   'app-chat-item-last-message',
-  class extends HTMLElement {
+  class extends Element {
     constructor() {
       super();
-      this._shadowRoot = this.attachShadow({ mode: 'open' });
-      this._shadowRoot.appendChild(template.content.cloneNode(true));
+      this.makeShadow(template);
       this._data = null;
     }
 
@@ -24,7 +19,7 @@ window.customElements.define(
     }
 
     render() {
-      this._shadowRoot.innerHTML = getMessage(this._data);
+      this.shadow.innerHTML = getMessage(this._data);
     }
   }
 );

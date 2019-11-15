@@ -4,63 +4,62 @@ const t = trans('core');
 const template = document.createElement('template');
 
 template.innerHTML = `
-    <style>
-        :host {
-            display: inline-block;
-          }
-          
-        button {
-          overflow: hidden;
-          position: relative;
-          display: inline-block;
-          box-sizing: border-box;
-          padding: 18px;
-          width: 100%;
-          border: none;
-          border-radius: 10px;
-          text-transform: uppercase;
-          background-color: #4da3f6;
-          color: #fff;
-          outline: none;
-          font-weight: 700;
-          cursor: pointer;
-          transition:background-color 0.2s ease-out;
-         
-        }
+<style>
+  :host {
+      display: inline-block;
+    }
+    
+  button {
+    overflow: hidden;
+    position: relative;
+    display: inline-block;
+    box-sizing: border-box;
+    padding: 18px;
+    width: 100%;
+    border: none;
+    border-radius: 10px;
+    text-transform: uppercase;
+    background-color: #4da3f6;
+    color: #fff;
+    outline: none;
+    font-weight: 700;
+    cursor: pointer;
+    transition:background-color 0.2s ease-out;
+    
+  }
 
-        .ripple{
-          z-index: 1;
-          position: absolute;
-          background-color: #408acf;
-          border-radius: 50%;
-          width: 25px;
-          height: 25px;
-          transition: transform 0.3s ease-out;
-        }
+  .ripple{
+    z-index: 1;
+    position: absolute;
+    background-color: #408acf;
+    border-radius: 50%;
+    width: 25px;
+    height: 25px;
+    transition: transform 0.3s ease-out;
+  }
 
-        .ripple.run{
-          transform: scale(30);
-        }
+  .ripple.run{
+    transform: scale(30);
+  }
 
-        button:hover{
-          background-color: #4696e1;
-        }
+  button:hover{
+    background-color: #4696e1;
+  }
 
-        span{
-          z-index: 2;
-          position: relative;
-        }
+  span{
+    z-index: 2;
+    position: relative;
+  }
 
-        app-loader{
-          z-index: 2;
-          position: absolute;
-          top: 50%;
-          right: 10px;
-          transform: translateY(-50%);
-        }
-
-    </style>
-    <button><span><slot></slot></span></button>
+  app-loader{
+    z-index: 2;
+    position: absolute;
+    top: 50%;
+    right: 10px;
+    transform: translateY(-50%);
+  }
+</style>
+<button><span><slot></slot></span></button>
 `;
 
 window.customElements.define(

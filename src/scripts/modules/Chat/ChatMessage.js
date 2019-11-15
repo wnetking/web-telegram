@@ -1,27 +1,27 @@
-const template = document.createElement('template');
+import core, { Element } from '../../../services/api/core';
 
+const template = document.createElement('template');
 template.innerHTML = `
-    <style>
-    :host {
-      display: inline-flex;
-      padding: 10px;
-      border-radius: 10px;
-      word-break: break-word;
-      line-height: 1.3;
-    }
-    </style>
-    <div></div>
+<style>
+  :host {
+    display: inline-flex;
+    padding: 10px;
+    border-radius: 10px;
+    word-break: break-word;
+    line-height: 1.3;
+  }
+</style>
+<div></div>
 `;
 
-window.customElements.define(
+core.define(
   'app-chat-message',
-  class extends HTMLElement {
+  class extends Element {
     constructor() {
       super();
-      this._shadowRoot = this.attachShadow({ mode: 'open' });
-      this._shadowRoot.appendChild(template.content.cloneNode(true));
+      this.makeShadow(template);
       this._message = null;
-      this.$wrap = this._shadowRoot.querySelector('div');
+      this.$wrap = this.shadow.$('div');
     }
 
     connectedCallback() {

@@ -1,76 +1,72 @@
-import {
-  trans
-} from '../../services';
+import { trans } from '../../services';
+import core, { Element } from '../../services/api/core';
+
 const t = trans('auth');
-
 const template = document.createElement('template');
-
 template.innerHTML = `
-    <style>
-        :host {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
+<style>
+  :host {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+  }
 
-        .section{
-          max-width: 355px;
-        }
+  .section{
+    max-width: 355px;
+  }
 
-        .tc {
-          text-align: center;
-        }
+  .tc {
+    text-align: center;
+  }
 
-        .main-logo{
-          width: 160px;
-          height: 160px;
-          margin-top: 108px;
-          margin-bottom: 17px;
-          margin-left: auto;
-          margin-right: auto;
-        }
+  .main-logo{
+    width: 160px;
+    height: 160px;
+    margin-top: 108px;
+    margin-bottom: 17px;
+    margin-left: auto;
+    margin-right: auto;
+  }
 
-        h2 {
-          margin-bottom: 17px;
-          font-size: 30px;
-          user-select: none;
-        }
+  h2 {
+    margin-bottom: 17px;
+    font-size: 30px;
+    user-select: none;
+  }
 
-        p {
-          margin-bottom: 50px;
-          padding: 0 55px;
-          color: #b9bbbd;
-          font-size: 15px;
-          line-height: 20px;
-          user-select: none;
-        }
+  p {
+    margin-bottom: 50px;
+    padding: 0 55px;
+    color: #b9bbbd;
+    font-size: 15px;
+    line-height: 20px;
+    user-select: none;
+  }
 
-        app-input, button{
-          width: 100%;
-          margin-bottom: 25px;
-        }
-    </style>
-      <section class="section tc">
-        <h2></h2>
-        <p></p>
-        <div>
-          <slot></slot>
-        </div>
-      </section>
+  app-input, button{
+    width: 100%;
+    margin-bottom: 25px;
+  }
+</style>
+<section class="section tc">
+  <h2></h2>
+  <p></p>
+  <div>
+    <slot></slot>
+  </div>
+</section>
 `;
 
-window.customElements.define(
+core.define(
   'app-auth-section',
-  class extends HTMLElement {
+  class extends Element {
     constructor() {
       super();
-      this._shadowRoot = this.attachShadow({
-        mode: 'open'
-      });
-      this._shadowRoot.appendChild(template.content.cloneNode(true));
-      this.$heading = this._shadowRoot.querySelector('h2');
-      this.$section = this._shadowRoot.querySelector('section');
-      this.$desc = this._shadowRoot.querySelector('p');
+      this.makeShadow(template);
+      this.$heading = this.shadow.$('h2');
+      this.$section = this.shadow.$('section');
+      this.$desc = this.shadow.$('p');
+
       this.isAminatedSticker = false;
 
       if (this.hasAttribute('heading')) {
@@ -90,7 +86,7 @@ window.customElements.define(
         );
       }
 
-      this.player = this._shadowRoot.querySelector('tgs-player');
+      this.player = this.shadow.$('tgs-player');
     }
 
     getImageTemplate(src) {
@@ -113,14 +109,8 @@ window.customElements.define(
 
     connectedCallback() {
       if (this.isAminatedSticker) {
-        this.player = this._shadowRoot.querySelector('tgs-player');
+        this.player = this.shadow.$('tgs-player');
       }
     }
-
-    static get observedAttributes() {
-      return ['heading', 'desc', 'img-src'];
-    }
-
-    attributeChangedCallback(name, oldVal, newVal) {}
   }
 );

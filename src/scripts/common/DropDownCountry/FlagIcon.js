@@ -1,4 +1,4 @@
-import core, { Element } from '../../services/api/core';
+import { Element } from '../../../services/api/core';
 import positions from './flagPositions';
 
 const template = document.createElement('template');

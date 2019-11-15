@@ -1,44 +1,34 @@
 import './ChatListItem';
 import * as a from '../../../services/store/actions/chatListActions';
 import * as chatA from '../../../services/store/actions/chatActions';
-
-// import mock from './mock';
-
-// const chats = new Map(mock);
-// console.log('chats', chats);
+import core, { Element } from '../../../services/api/core';
 
 const template = document.createElement('template');
-
 template.innerHTML = `
-    <style>
-    :host {
-      position: relative;
-      max-height: 100vh;
-    }
-     
+<style>
+  :host {
+    position: relative;
+    max-height: 100vh;
+  }
 
-    div {
-
-    }
-    app-loader{
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-    }
-    </style>
-    <div><app-loader big></app-loader></div>
-    <slot></slot>
+  app-loader{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+</style>
+<div><app-loader big></app-loader></div>
+<slot></slot>
 `;
 
-window.customElements.define(
+core.define(
   'app-chat-left-sidebar',
-  class extends AppElement {
+  class extends Element {
     constructor() {
       super();
-      this._shadowRoot = this.attachShadow({ mode: 'open' });
-      this._shadowRoot.appendChild(template.content.cloneNode(true));
-      this.$loader = this._shadowRoot.querySelector('app-loader');
+      this.makeShadow(template);
+      this.$loader = this.shadow.$('app-loader');
       this.setChatInfoHandler = this.setChatInfoHandler.bind(this);
       this.renderFirstChatDetails = true;
     }
@@ -59,22 +49,20 @@ window.customElements.define(
         });
       }
 
-
       this.addEventListener('scroll', a.getChatListOnScroll);
     }
 
     connectedCallback() {
-      document.addEventListener(
-        'chatList.setChatInfo',
-        this.setChatInfoHandler
-      );
+      core.on('chatList.setChatInfo', this.setChatInfoHandler);
       a.getChatAction({
         offset_chat_id: 0,
         offset_order: '9223372036854775807',
         limit: 30
       });
+    }
 
-
+    disconnectedCallback() {
+      core.off('chatList.setChatInfo', this.setChatInfoHandler);
     }
 
     renderChat(chat, chatId) {

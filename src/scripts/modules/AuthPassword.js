@@ -1,69 +1,56 @@
-import {
-  trans,
-  api
-} from '../../services';
-import {
-  push
-} from '../../services/router';
+import { trans, api } from '../../services';
+import core, { Element } from '../../services/api/core';
+
 const t = trans('auth');
-
 const template = document.createElement('template');
-
 template.innerHTML = `
-    <style>
-    app-input, app-button{
-      width: 100%;
-      margin-bottom: 25px;
-    }
-    </style>
-    <app-auth-section heading="${t.password_header}" desc="${t.password_desc}" img-src="./public/images/TwoFactorSetupMonkeyClose.tgs">
-      <app-input type="password" label="${t.password}"></app-input>
-              
-      <app-button>${t.phone_submit}</app-button>
-    </app-auth-section>
+<style>
+  app-input, app-button{
+    width: 100%;
+    margin-bottom: 25px;
+  }
+</style>
+<app-auth-section heading="${t.password_header}" desc="${t.password_desc}" img-src="./public/images/TwoFactorSetupMonkeyClose.tgs">
+  <app-input data-error-event="password_invalid" type="password" label="${t.password}"></app-input>
+  <app-button>${t.phone_submit}</app-button>
+</app-auth-section>
 `;
 
-window.customElements.define(
+core.define(
   'app-auth-password',
-  class extends HTMLElement {
+  class extends Element {
     constructor() {
       super();
-      this._shadowRoot = this.attachShadow({
-        mode: 'open'
-      });
-      this._shadowRoot.appendChild(template.content.cloneNode(true));
-
-      this.$submitButton = this._shadowRoot.querySelector('app-button');
-      this.$input = this._shadowRoot.querySelector('app-input');
-
+      this.makeShadow(template);
+      this.$submitButton = this.shadow.$('app-button');
+      this.$input = this.shadow.$('app-input');
       this._password = null;
+      this.inputFocus = this.inputFocus.bind(this);
+      this.onChangeHandle = this.onChangeHandle.bind(this);
+      this.onKeyDownHandle = this.onKeyDownHandle.bind(this);
+      this.onSubmitButtonHandle = this.onSubmitButtonHandle.bind(this);
 
-      this.$input.addEventListener(
-        'toggle-password',
-        this.inputFocus.bind(this)
-      );
-      this.$input.addEventListener('change', this.onChangeHandle.bind(this));
-      this.$input.addEventListener('keydown', this.onKeyDownHandle.bind(this));
-      this.$submitButton.addEventListener('click', this.onSubmitButtonHandle.bind(this));
     }
 
     connectedCallback() {
-      this.section = this._shadowRoot.querySelector('app-auth-section');
+      this.section = this.shadow.$('app-auth-section');
       this.player = this.section.player;
 
       if (this.player) {
         this.pause();
       }
+
+      core.on('toggle-password', this.inputFocus, this.$input);
+      core.on('change', this.onChangeHandle, this.$input);
+      core.on('keydown', this.onKeyDownHandle, this.$input);
+      core.on('click', this.onSubmitButtonHandle, this.$submitButton);
     }
 
     disconnectedCallback() {
-      this.$submitButton.removeEventListener('click', this.onSubmitButtonHandle.bind(this));
-      this.$input.removeEventListener(
-        'toggle-password',
-        this.inputFocus.bind(this)
-      );
-      this.$input.removeEventListener('change', this.onChangeHandle.bind(this));
-      this.$input.removeEventListener('keydown', this.onKeyDownHandle.bind(this));
+      core.off('toggle-password', this.inputFocus, this.$input);
+      core.off('change', this.onChangeHandle, this.$input);
+      core.off('keydown', this.onKeyDownHandle, this.$input);
+      core.off('click', this.onSubmitButtonHandle, this.$submitButton);
     }
 
     pause() {
@@ -105,12 +92,17 @@ window.customElements.define(
 
     onKeyDownHandle(e) {
       if (e.keyCode === 13) {
-        this._password = this.$input.$input.value;
+        this._password = String(this.$input.$input.value);
         this.onSubmitButtonHandle();
       }
     }
 
     onSubmitButtonHandle() {
+      if (!this._password || this._password.length < 1) {
+        this.$input.$input.focus();
+        return false;
+      }
+
       api.send({
         '@type': 'checkAuthenticationPassword',
         password: this._password,

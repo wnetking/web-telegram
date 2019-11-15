@@ -1,42 +1,42 @@
 import store from '../services/store';
-import { routes, push, Router } from '../services/router';
-
 import { api } from '../services/';
+import core, { Element } from '../services/api/core';
+import { routes, Router } from '../services/router';
 
 api.init();
 api.sendTdParameters();
-// Needed for correct another request
 api.send({
   '@type': 'checkDatabaseEncryptionKey'
 });
 
 const template = document.createElement('template');
 template.innerHTML = `
-    <style>
-    app-auth-section app-input, app-auth-section button{
-      width: 100%;
-      margin-bottom: 25px;
-    }
-
-    </style>
-    <main id="app" class="main-container">Main page</main>
+<style>
+  app-auth-section app-input, app-auth-section button{
+    width: 100%;
+    margin-bottom: 25px;
+  }
+</style>
+<main id="app" class="main-container">Main page</main>
 `;
 
-window.customElements.define(
+core.define(
   'main-app',
-  class extends AppElement {
+  class extends Element {
     constructor() {
       super();
       this.appendChild(template.content.cloneNode(true));
-
       this.$app = document.getElementById('app');
       this.router = new Router(this.$app, routes, store);
+      window.addEventListener('beforeunload', this.beforeunloadHandler.bind(this))
     }
 
     connectedCallback() {
       this.router.init();
     }
 
-    render(path) {}
+    beforeunloadHandler() {
+      api.send({ '@type': 'logOut' });
+    }
   }
 );

@@ -4,6 +4,7 @@ import './common/Loader';
 import './common/Button';
 import './common/Icon';
 import './common/DropDownCountry/Dropdown';
+import './common/Checkbox';
 import './modules/AuthSection';
 import './modules/Registration';
 import './modules/Auth';

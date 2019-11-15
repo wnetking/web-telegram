@@ -107,6 +107,16 @@ core.define(
       return `<div class='img-wrapper'><img src="${src}" alt="image" width="160" height="160" class="main-logo"/></div>`;
     }
 
+    attributeChangedCallback(name, oldVal, newVal) {
+      if(name == 'heading' && oldVal !== newVal){
+        this.$heading.innerHTML = newVal;
+      }
+    }
+
+    static get observedAttributes() {
+      return ['heading'];
+    }
+
     connectedCallback() {
       if (this.isAminatedSticker) {
         this.player = this.shadow.$('tgs-player');

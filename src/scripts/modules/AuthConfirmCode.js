@@ -1,6 +1,13 @@
-import { trans, api } from "../../services";
-import { catchPaste } from "../../utils/common";
-import core, { Element } from '../../services/api/core';
+import {
+  trans,
+  api
+} from "../../services";
+import {
+  catchPaste
+} from "../../utils/common";
+import core, {
+  Element
+} from '../../services/api/core';
 import store from "../../services/store/";
 
 const t = trans("auth");
@@ -24,7 +31,7 @@ core.define(
       super();
       this.makeShadow(template);
       this.$input = this.shadow.$(".confirmation-code");
-      this.$authSection = this.shadow.$("app-auth-section");
+      this.$section = this.shadow.$("app-auth-section");
 
       this._code = null;
 
@@ -36,10 +43,12 @@ core.define(
     }
 
     connectedCallback() {
-      const { userInfo } = store.getState();
-      this.section = this.shadow.$("app-auth-section");
-      this.player = this.section.player;
-      this.$authSection.setAttribute('heading', userInfo.temploaryPhone);
+      const {
+        userInfo
+      } = store.getState();
+
+      this.player = this.$section.player;
+      this.$section.setAttribute('heading', userInfo.temporaryPhone);
 
       core.on("change", this.onChangeInputHanlde, this.$input);
       core.on("focus", this.onChangeInputHanlde, this.$input);
@@ -53,13 +62,15 @@ core.define(
       core.off("focus", this.onChangeInputHanlde, this.$input);
       core.off("focusout", this.inputFocusOut, this.$input);
       core.off("keydown", this.onKeydownPhoneHandler, this.$input);
-      core.off("paste", this.onKeydownPhoneHandler, this.$input);
+      core.off("paste", this.onPasteHandle, this.$input);
 
     }
 
     onChangeInputHanlde(e) {
       const {
-        detail: { value }
+        detail: {
+          value
+        }
       } = e;
       this._code = String(value);
     }
@@ -79,7 +90,7 @@ core.define(
     }
 
     onSubmitHandle() {
-      if (String(this._code).length < 1) {
+      if (!this._code || this._code.length < 1) {
         this.$input.$input.focus();
         return false;
       }
@@ -101,7 +112,7 @@ core.define(
 
     inputFocusOut(e) {
       if (this.player) {
-        this.player.load(this.section.getAttribute("img-src"));
+        this.player.load(this.$section.getAttribute("img-src"));
         this.player.setLooping(false);
       }
     }

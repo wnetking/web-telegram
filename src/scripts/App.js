@@ -33,6 +33,7 @@ core.define(
 
     connectedCallback() {
       this.router.init();
+      // api.send({ '@type': 'logOut' });
     }
 
     beforeunloadHandler() {

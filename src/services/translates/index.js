@@ -17,7 +17,8 @@ const state = {
     registration_desc: 'Enter yout name and add a profile picture',
     name : 'Name',
     last_name : 'Last name (optional)',
-    start_messanging: 'Start messanging'
+    start_messanging: 'Start messanging',
+    checkbox_label : 'Keep me sign up'
   }
 };
 

@@ -5,6 +5,7 @@ import './common/Button';
 import './common/Icon';
 import './common/Modal';
 import './common/DropDownCountry/Dropdown';
+import './common/Checkbox';
 import './modules/AuthSection';
 import './modules/Registration';
 import './modules/Auth';

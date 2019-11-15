@@ -100,7 +100,7 @@ core.define(
       );
 
       this.$wrap.addEventListener('click', this.onWrapClickHandler);
-      code.on('chat.setChatHistoryToStore', this.setChatHistoryToStoreHandler);
+      core.on('chat.setChatHistoryToStore', this.setChatHistoryToStoreHandler);
     }
 
     setChatHistoryToStoreHandler({ detail }) {

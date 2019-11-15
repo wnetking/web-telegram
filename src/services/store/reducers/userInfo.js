@@ -4,7 +4,7 @@ const initialState = {
   authWaitCode: false,
   authWaitPassword: false,
   authHasErrors: false,
-  temporaryPhone : null
+  temporaryPhone : 'Phone number'
 };
 
 module.exports = function (state = initialState, action) {

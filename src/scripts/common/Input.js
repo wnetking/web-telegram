@@ -29,6 +29,10 @@ template.innerHTML = `
     caret-color: var(--focus-color);
   }
 
+  input[type="tel"]{
+    letter-spacing: 1px;
+  }
+
   input.has-error{
     border-color: var(--focus-error-color);
     caret-color: var(--focus-error-color);

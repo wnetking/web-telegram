@@ -31,6 +31,7 @@ function chechAuthState(update) {
           break;
         case 'authorizationStateWaitCode':
           a.authorizationStateWaitCode();
+          a.setTemploaryPhone(update.authorization_state.code_info.phone_number)
           push('#/code-confirm');
           break;
         case 'authorizationStateWaitPassword':

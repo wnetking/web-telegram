@@ -190,14 +190,10 @@ export class Input extends HTMLElement {
 
     if (value) {
       this.$input.classList.add('with-value');
+    } else {
+      this.$input.classList.remove('with-value');
+      this.resetErrorState();
     }
-
-    // if (value) {
-    //   this.$input.classList.add('with-value');
-    // } else {
-    //   this.$input.classList.remove('with-value');
-    //   this.resetErrorState();
-    // }
   }
 
   clickHandler(e) {
@@ -246,11 +242,9 @@ export class Input extends HTMLElement {
   setErrorState() {
     if (this.hasAttribute('has-error')) {
       this.$input.classList.add('has-error');
-      this.$input.classList.add('with-value');
       if (this.hasAttribute('error-message')) {
         this.$label.innerHTML = this.getAttribute('error-message');
       }
-      this.$input.focus();
     }
   }
 

@@ -48,12 +48,12 @@ window.customElements.define(
       const {
         detail: { value }
       } = e;
-      this._code = value;
+      this._code = String(value);
     }
 
     onKeydownPhoneHandler(e) {
       if (e.keyCode === 13) {
-        this._code = e.target.$input.value;
+        this._code = String(e.target.$input.value);
         this.onSubmitHandle();
       }
     }
@@ -66,6 +66,10 @@ window.customElements.define(
     }
 
     onSubmitHandle() {
+      if(String(this._code).length < 1){
+        this.$input.$input.focus();
+        return false;
+      }
       api.send({
         '@type': 'checkAuthenticationCode',
         code: this._code

@@ -116,6 +116,7 @@ window.customElements.define(
 
     sendPhoneHandle() {
       if (!this.telephone) {
+        this.$inputPhone.$input.focus();
         return false;
       }
       this.$submitButton.setAttribute('is-loading', null);

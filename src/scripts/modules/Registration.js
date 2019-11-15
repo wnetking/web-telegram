@@ -114,7 +114,7 @@ window.customElements.define(
           value
         }
       } = e;
-      this.name = value;
+      this.name = String(value);
     }
 
     onChangeLastName(e) {
@@ -123,13 +123,13 @@ window.customElements.define(
           value
         }
       } = e;
-      this.lastName = value
+      this.lastName = String(value);
     }
 
     onKeyDownHandle(e) {
       if (e.keyCode === 13) {
-        this.name = this.$name_input.$input.value;
-        this.lastName = this.$lastname_input.$input.value || '';
+        this.name = String(this.$name_input.$input.value);
+        this.lastName = String(this.$lastname_input.$input.value) || '';
         this.onSubmitHandle();
       }
     }
@@ -139,6 +139,10 @@ window.customElements.define(
     }
 
     onSubmitHandle() {
+      if(!this.name || this.name.length < 1){
+        this.$name_input.$input.focus();
+        return false;
+      }
       api.send({
         '@type': 'registerUser',
         first_name: this.name,

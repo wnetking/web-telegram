@@ -105,12 +105,16 @@ window.customElements.define(
 
     onKeyDownHandle(e) {
       if (e.keyCode === 13) {
-        this._password = this.$input.$input.value;
+        this._password = String(this.$input.$input.value);
         this.onSubmitButtonHandle();
       }
     }
 
     onSubmitButtonHandle() {
+      if(!this._password || this._password.length < 1){
+        this.$input.$input.focus();
+        return false;
+      }
       api.send({
         '@type': 'checkAuthenticationPassword',
         password: this._password,

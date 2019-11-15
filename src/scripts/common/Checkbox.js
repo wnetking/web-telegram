@@ -13,6 +13,7 @@ template.innerHTML = `
   .app-checkbox{
     text-align: left;
     margin-left : 20px;
+    margin-bottom: 35px;
   }
 
 

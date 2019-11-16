@@ -33,6 +33,12 @@ template.innerHTML = `
   <app-input data-error-event='phone_invalid' type="tel" value='' label="${t.phone}" pattern="^(?:\(\d{3}\)|\d{3})[- ]?\d{3}[- ]?\d{4}$"></app-input>
   <app-checkbox is-checked='false' label-text='${t.checkbox_label}'></app-checkbox>
   <app-button class="hidden">${t.phone_submit}</app-button>
+
+  <button class="open">Open</button>
+
+  <app-modal title="Important!">
+    <p>This is some really important stuff</p>
+  </app-modal>
 </app-auth-section>
 `;
 
@@ -49,6 +55,7 @@ core.define(
       this.$checkbox = this.shadow.$('app-checkbox');
 
       this.telephone = '';
+      this.selectedData = {};
 
       this.sendPhoneHandle = this.sendPhoneHandle.bind(this);
       this.onChangePhoneHandle = this.onChangePhoneHandle.bind(this);
@@ -63,6 +70,20 @@ core.define(
       core.on('keyup', this.onKeydownPhoneHandler, this.$inputPhone);
       core.on('dropdown.change', this.dropdownChange, this.$country);
       core.on('change', this.onChangeCheckboxHandle, this.$checkbox);
+
+
+      const modal = this.shadow.$("app-modal");
+      modal.addEventListener("cancel", function () {
+        console.log("cancel event raised");
+      });
+      modal.addEventListener("ok", function () {
+        console.log("ok event raised");
+      });
+
+      const open = this.shadow.$(".open");
+      open.addEventListener("click", function () {
+        modal.visible = true;
+      })
     }
 
     disconnectedCallback() {
@@ -77,6 +98,8 @@ core.define(
       detail
     }) {
       this.$inputPhone.$input.value = `+${detail.dialCode}`;
+      this.selectedData = detail;
+
       this.$inputPhone.keyupHandler({
         target: this.$inputPhone.$input,
       });

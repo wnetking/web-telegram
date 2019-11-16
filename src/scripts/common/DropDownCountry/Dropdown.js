@@ -57,6 +57,12 @@ template.innerHTML = `
     background-color: #dadce0;
     border-radius: 3px;
   }
+
+  app-flag-item {
+    width: 23px;
+    display: block;
+    background-color: #b9bbbd;
+  }
 </style>
 <div class="drop-down-wrap"></div>
 `;
@@ -129,7 +135,9 @@ core.define(
       });
 
       import('./FlagIcon.js').then(({ default: FlagItem }) => {
-        window.customElements.define('app-flag-item', FlagItem);
+        if (!window.customElements.get('app-flag-item')) {
+          window.customElements.define('app-flag-item', FlagItem);
+        }
       });
     }
 

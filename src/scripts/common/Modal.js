@@ -13,7 +13,7 @@ template.innerHTML = `
   top: 0;
   width: 100%;
   height: 100%;
-  background-color: gray;
+  background-color: rgba(0, 0, 0, 0.4);
   opacity: 0;
   visibility: hidden;
   transform: scale(1.1);
@@ -27,37 +27,41 @@ template.innerHTML = `
   transition: visibility 0s linear 0s,opacity .25s 0s,transform .25s;
 }
 .modal {
-  font-family: Helvetica;
   font-size: 14px;
-  padding: 10px 10px 5px 10px;
+  padding: 17px 25px;
   background-color: #fff;
   position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%,-50%);
-  border-radius: 2px;
-  min-width: 300px;
+  border-radius: 10px;
+  min-width: 445px;
 }
+
 .title {
   font-size: 18px;
 }
 .button-container {
   text-align: right;
 }
-button {
-  min-width: 80px;
-  background-color: #848e97;
-  border-color: #848e97;
-  border-style: solid;
-  border-radius: 2px;
-  padding: 3px;
+
+.cancel {
+  position: absolute;
+  top: 17px;
+  left: 19px;
+  background: none;
+  border: none;
   color:white;
   cursor: pointer;
+  font-size: 22px;
+  color: #707478;
+  outline: none;
 }
-button:hover {
-  background-color: #6c757d;
-  border-color: #6c757d;
+
+.cancel:focus {
+  color: #000;
 }
+
 </style>
 <div class='wrapper'>
   <div class='modal'>
@@ -65,10 +69,7 @@ button:hover {
     <div class='content'>
       <slot></slot>
     </div>
-    <div class='button-container'>
-      <button class='cancel'>Cancel</button>
-      <button class='ok'>Okay</button>
-    </div>
+    <button class='cancel'><app-icon icon="close_svg"></app-icon></button>
   </div>
 </div>`;
 
@@ -138,10 +139,6 @@ core.define('app-modal', class Modal extends Element {
 
     cancelButton.addEventListener('click', e => {
       this.emmit("cancel")
-      this.removeAttribute("visible");
-    });
-    okButton.addEventListener('click', e => {
-      this.emmit("ok")
       this.removeAttribute("visible");
     });
   }

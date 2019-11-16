@@ -3,6 +3,13 @@
 
 $body-color: #000;
 
+:root{
+  --primary-color: #4da3f6;
+  --primary-color-darker: #4696e1;
+  --white: #fff;
+  --black: #000;
+}
+
 html,body{
   height: 100%;
 }

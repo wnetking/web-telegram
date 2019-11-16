@@ -15,10 +15,11 @@ const state = {
     password: 'Password',
     registration_name: 'Your name',
     registration_desc: 'Enter yout name and add a profile picture',
-    name : 'Name',
-    last_name : 'Last name (optional)',
+    name: 'Name',
+    last_name: 'Last name (optional)',
     start_messanging: 'Start messanging',
-    checkbox_label : 'Keep me sign up'
+    checkbox_label: 'Keep me signed in',
+    cropp_title: 'Drag to Reposition'
   }
 };
 

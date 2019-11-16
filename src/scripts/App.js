@@ -44,10 +44,10 @@ core.define(
 
     connectedCallback() {
       this.router.init();
-      this.checkActiveSession();
+      this.logOut();
     }
 
-    checkActiveSession() {
+    logOut() {
       if (getCookie('activeSession') && !getCookie('keepMeAuth')) {
         api.send({
           '@type': 'logOut',

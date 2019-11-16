@@ -1,7 +1,19 @@
 import store from '../services/store';
-import { api } from '../services/';
-import core, { Element } from '../services/api/core';
-import { routes, Router } from '../services/router';
+import {
+  api,
+} from '../services/';
+import core, {
+  Element
+} from '../services/api/core';
+import {
+  routes,
+  Router,
+  push
+} from '../services/router';
+import {
+  getCookie,
+  deleteCookie
+} from '../utils/common';
 
 api.init();
 api.sendTdParameters();
@@ -28,16 +40,23 @@ core.define(
       this.appendChild(template.content.cloneNode(true));
       this.$app = document.getElementById('app');
       this.router = new Router(this.$app, routes, store);
-      window.addEventListener('beforeunload', this.beforeunloadHandler.bind(this))
     }
 
     connectedCallback() {
       this.router.init();
-      // api.send({ '@type': 'logOut' });
+      // this.checkActiveSession();
     }
 
-    beforeunloadHandler() {
-      api.send({ '@type': 'logOut' });
+    checkActiveSession() {
+      // if (getCookie('activeSession') && !getCookie('keepMeAuth')) {
+      //   api.send({
+      //     '@type': 'terminateSession',
+      //     session_id: parseInt(getCookie('activeSession'))
+      //   }).then(() => {
+      //     deleteCookie('activeSession');
+      //     push('/#/auth')
+      //   });
+      // }
     }
   }
 );

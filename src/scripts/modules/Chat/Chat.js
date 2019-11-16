@@ -1,6 +1,8 @@
 import './ChatMessage';
 import core, { Element } from '../../../services/api/core';
 import * as a from '../../../services/store/actions/chatActions';
+import {api} from '../../../services/';
+import {setCookie} from '../../../utils/common';
 
 const template = document.createElement('template');
 
@@ -98,6 +100,7 @@ core.define(
       core.on('chat.getChatHistoryRequest', this.getChatHistoryRequestHandler);
       core.on('chat.setChatHistoryToStore', this.setChatHistoryToStoreHandler);
       core.on('chat.updateChatHistory', this.updateChatHistory);
+      this.checkActiveSession();
     }
 
     disconnectedCallback() {
@@ -167,6 +170,15 @@ core.define(
       });
 
       return fragment;
+    }
+
+    checkActiveSession(){
+      api.send({
+        '@type': 'getActiveSessions'
+      }).then(data => {
+        const activeSession = data.sessions.filter(session => session.is_current);
+        setCookie('activeSession', activeSession[0].id, {expires : 1000 * 60 * 365})
+      })
     }
 
     render(data, store) {

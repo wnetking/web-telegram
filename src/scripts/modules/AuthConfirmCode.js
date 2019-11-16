@@ -19,7 +19,7 @@ template.innerHTML = `
     margin-bottom: 25px;
   }
 </style>
-<app-auth-section heading="${t.phone}" desc="${t.code_desc}" img-src="./public/images/TwoFactorSetupMonkeyIdle.tgs" >
+<app-auth-section heading="${t.phone}" desc="${t.code_desc}" isEdit img-src="./public/images/TwoFactorSetupMonkeyIdle.tgs" >
   <app-input data-error-event='phone_code_invalid' class='confirmation-code' type="text" label="${t.code}"></app-input>
 </app-auth-section>
 `;

@@ -1,4 +1,5 @@
-const template = document.createElement('template');
+const Inputmask = require("inputmask");
+const template = document.createElement("template");
 
 template.innerHTML = `
 <style>
@@ -29,7 +30,7 @@ template.innerHTML = `
     caret-color: var(--focus-color);
   }
 
-  input[type="tel"]{
+  input[data-has-mask]{
     letter-spacing: 1px;
   }
 
@@ -92,38 +93,39 @@ export class Input extends HTMLElement {
   constructor() {
     super();
     this._shadowRoot = this.attachShadow({
-      mode: 'open'
+      mode: "open"
     });
     this._shadowRoot.appendChild(template.content.cloneNode(true));
 
-    this.$input = this._shadowRoot.querySelector('input');
-    this.$label = this._shadowRoot.querySelector('label');
-    this.$inputWrap = this._shadowRoot.querySelector('.input-wrap');
+    this.$input = this._shadowRoot.querySelector("input");
+    this.$label = this._shadowRoot.querySelector("label");
+    this.$inputWrap = this._shadowRoot.querySelector(".input-wrap");
 
-    this.customAttr = ['label'];
-    this.value = this.hasAttribute('value') ? this.getAttribute('value') : '';
+    this.customAttr = ["label"];
+    this.value = this.hasAttribute("value") ? this.getAttribute("value") : "";
 
     if (this.value) {
-      this.$input.classList.add('with-value');
+      this.$input.classList.add("with-value");
     }
 
-    if (this.hasAttribute('label')) {
-      this.$label.innerHTML = this.getAttribute('label');
+    if (this.hasAttribute("label")) {
+      this.$label.innerHTML = this.getAttribute("label");
     }
 
     this.setErrorState();
   }
 
   static get observedAttributes() {
-    return ['has-error'];
+    return ["has-error"];
   }
 
   attributeChangedCallback(name, oldVal, newVal) {
-    if (name === 'has-error' && newVal === true) {
+    if (name === "has-error" && newVal === true) {
+      ``;
       this.setErrorState();
     }
 
-    if (name === 'has-error' && newVal === false) {
+    if (name === "has-error" && newVal === false) {
       this.resetErrorState();
     }
   }
@@ -139,51 +141,63 @@ export class Input extends HTMLElement {
       });
     }
 
-    if (this.getAttribute('type') === 'password') {
+    if (this.getAttribute("type") === "password") {
       this.typePasswordRendered();
     }
 
-    this.$input.addEventListener('click', this.clickHandler.bind(this));
-    this.$input.addEventListener('keyup', this.keyupHandler.bind(this));
-    this.$input.addEventListener('change', this.changeHandler.bind(this));
+    this.$input.addEventListener("click", this.clickHandler.bind(this));
+    this.$input.addEventListener("keyup", this.keyupHandler.bind(this));
+    this.$input.addEventListener("change", this.changeHandler.bind(this));
 
-    if (this.hasAttribute('data-error-event')) {
-      document.addEventListener(this.getAttribute('data-error-event'), this.customErrorHandle.bind(this))
+    if (this.hasAttribute("data-error-event")) {
+      document.addEventListener(
+        this.getAttribute("data-error-event"),
+        this.customErrorHandle.bind(this)
+      );
+    }
+
+    if (this.hasAttribute("data-has-mask")) {
+      // Inputmask({
+      //   mask: "+9{2} 9{1} 99{2} 99{2} 99{*}",
+      //   numericInput: true,
+      //   placeholder: ""
+      // }).mask(this.$input);
     }
 
     this.extendConnectedCallback();
   }
 
   disconnectedCallback() {
-    this.$input.removeEventListener('click', this.clickHandler.bind(this));
-    this.$input.removeEventListener('keyup', this.keyupHandler.bind(this));
-    this.$input.removeEventListener('change', this.changeHandler.bind(this));
-    if (this.hasAttribute('data-error-event')) {
-      document.removeEventListener(this.getAttribute('data-error-event'), this.customErrorHandle.bind(this))
+    this.$input.removeEventListener("click", this.clickHandler.bind(this));
+    this.$input.removeEventListener("keyup", this.keyupHandler.bind(this));
+    this.$input.removeEventListener("change", this.changeHandler.bind(this));
+    if (this.hasAttribute("data-error-event")) {
+      document.removeEventListener(
+        this.getAttribute("data-error-event"),
+        this.customErrorHandle.bind(this)
+      );
     }
   }
 
-  extendConnectedCallback() { }
+  extendConnectedCallback() {}
 
-  extendDisconnectedCallback() { }
+  extendDisconnectedCallback() {}
 
   customErrorHandle(e) {
     const {
-      detail: {
-        message
-      }
-    } = e
-    this.setAttribute('has-error', true);
-    this.setAttribute('error-message', message);
+      detail: { message }
+    } = e;
+    this.setAttribute("has-error", true);
+    this.setAttribute("error-message", message);
     this.setErrorState();
   }
 
   typePasswordRendered() {
-    const button = document.createElement('button');
-    this.icon = document.createElement('app-icon');
-    this.icon.setAttribute('icon', 'eye1_svg');
+    const button = document.createElement("button");
+    this.icon = document.createElement("app-icon");
+    this.icon.setAttribute("icon", "eye1_svg");
     button.appendChild(this.icon);
-    button.addEventListener('click', this.togglePasswordType.bind(this));
+    button.addEventListener("click", this.togglePasswordType.bind(this));
     this.$inputWrap.appendChild(button);
   }
 
@@ -195,15 +209,15 @@ export class Input extends HTMLElement {
     const value = e.target.value;
 
     if (value) {
-      this.$input.classList.add('with-value');
+      this.$input.classList.add("with-value");
     } else {
-      this.$input.classList.remove('with-value');
+      this.$input.classList.remove("with-value");
       this.resetErrorState();
     }
   }
 
   clickHandler(e) {
-    const event = new CustomEvent('click', {
+    const event = new CustomEvent("click", {
       detail: {
         value: e.target.value,
         target: e.target
@@ -217,7 +231,8 @@ export class Input extends HTMLElement {
    * @param {object} e
    */
   changeHandler(e) {
-    const event = new CustomEvent('change', {
+    console.log(e.target.value);
+    const event = new CustomEvent("change", {
       detail: {
         value: e.target.value,
         target: e.target
@@ -227,17 +242,17 @@ export class Input extends HTMLElement {
   }
 
   togglePasswordType(e) {
-    const needShowPassword = this.$input.getAttribute('type') === 'password';
+    const needShowPassword = this.$input.getAttribute("type") === "password";
 
     if (needShowPassword) {
-      this.$input.setAttribute('type', 'text');
-      this.icon.setAttribute('icon', 'eye2_svg');
+      this.$input.setAttribute("type", "text");
+      this.icon.setAttribute("icon", "eye2_svg");
     } else {
-      this.$input.setAttribute('type', 'password');
-      this.icon.setAttribute('icon', 'eye1_svg');
+      this.$input.setAttribute("type", "password");
+      this.icon.setAttribute("icon", "eye1_svg");
     }
 
-    const event = new CustomEvent('toggle-password', {
+    const event = new CustomEvent("toggle-password", {
       detail: {
         isPasswordShow: needShowPassword
       }
@@ -246,17 +261,17 @@ export class Input extends HTMLElement {
   }
 
   setErrorState() {
-    if (this.hasAttribute('has-error')) {
-      this.$input.classList.add('has-error');
-      if (this.hasAttribute('error-message')) {
-        this.$label.innerHTML = this.getAttribute('error-message');
+    if (this.hasAttribute("has-error")) {
+      this.$input.classList.add("has-error");
+      if (this.hasAttribute("error-message")) {
+        this.$label.innerHTML = this.getAttribute("error-message");
       }
     }
   }
 
   resetErrorState() {
-    this.$input.classList.remove('has-error');
-    this.$label.innerHTML = this.getAttribute('label');
+    this.$input.classList.remove("has-error");
+    this.$label.innerHTML = this.getAttribute("label");
   }
 }
-window.customElements.define('app-input', Input);
+window.customElements.define("app-input", Input);

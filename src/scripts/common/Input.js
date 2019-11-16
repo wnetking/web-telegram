@@ -112,13 +112,7 @@ export class Input extends HTMLElement {
       this.$label.innerHTML = this.getAttribute("label");
     }
 
-    if (this.hasAttribute("data-has-mask")) {
-      Inputmask({
-        numericInput: true,
-        greedy: false,
-        mask: "+9{*}"
-      }).mask(this.$input);
-    }
+
 
     this.setErrorState();
   }
@@ -164,6 +158,14 @@ export class Input extends HTMLElement {
       );
     }
 
+    if (this.hasAttribute("data-has-mask")) {
+      Inputmask({
+        numericInput: true,
+        greedy: false,
+        mask: "+9{*}"
+      }).mask(this.$input);
+    }
+
     this.extendConnectedCallback();
   }
 
@@ -185,7 +187,9 @@ export class Input extends HTMLElement {
 
   customErrorHandle(e) {
     const {
-      detail: { message }
+      detail: {
+        message
+      }
     } = e;
     this.setAttribute("has-error", true);
     this.setAttribute("error-message", message);
@@ -231,7 +235,6 @@ export class Input extends HTMLElement {
    * @param {object} e
    */
   changeHandler(e) {
-    console.log(e.target.value);
     const event = new CustomEvent("change", {
       detail: {
         value: e.target.value,

@@ -54,7 +54,7 @@ core.define(
       core.on("focus", this.onChangeInputHanlde, this.$input);
       core.on("focusout", this.inputFocusOut, this.$input);
       core.on("keydown", this.onKeydownPhoneHandler, this.$input);
-      core.on("paste", this.onKeydownPhoneHandler, this.$input);
+      core.on("paste", this.onPasteHandle, this.$input);
     }
 
     disconnectedCallback() {
@@ -83,6 +83,7 @@ core.define(
     }
 
     onPasteHandle(e) {
+      console.log('paste')
       catchPaste(e, this, code => {
         this._code = code;
         this.onSubmitHandle();

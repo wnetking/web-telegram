@@ -112,6 +112,14 @@ export class Input extends HTMLElement {
       this.$label.innerHTML = this.getAttribute("label");
     }
 
+    if (this.hasAttribute("data-has-mask")) {
+      Inputmask({
+        numericInput: true,
+        greedy: false,
+        mask: "+9{*}"
+      }).mask(this.$input);
+    }
+
     this.setErrorState();
   }
 
@@ -154,14 +162,6 @@ export class Input extends HTMLElement {
         this.getAttribute("data-error-event"),
         this.customErrorHandle.bind(this)
       );
-    }
-
-    if (this.hasAttribute("data-has-mask")) {
-      // Inputmask({
-      //   mask: "+9{2} 9{1} 99{2} 99{2} 99{*}",
-      //   numericInput: true,
-      //   placeholder: ""
-      // }).mask(this.$input);
     }
 
     this.extendConnectedCallback();

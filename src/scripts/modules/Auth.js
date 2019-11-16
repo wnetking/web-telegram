@@ -53,7 +53,7 @@ core.define(
       this.makeShadow(template);
 
       this.$submitButton = this.shadow.$('app-button');
-      this.$inputPhone = this.shadow.$('[type=tel]');
+      this.$inputPhone = this.shadow.$('[data-has-mask]');
       this.$country = this.shadow.$('app-chat-country-phone-code');
       this.$checkbox = this.shadow.$('app-checkbox');
 

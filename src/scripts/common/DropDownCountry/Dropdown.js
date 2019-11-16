@@ -39,12 +39,8 @@ template.innerHTML = `
   }
 
   .drop-down-wrap{
-
-  }
-
-  .drop-down-wrap{
     overflow-y: auto;
-    max-height: 300px;
+    max-height: 290px;
   }
 
   .drop-down-wrap::-webkit-scrollbar-track {

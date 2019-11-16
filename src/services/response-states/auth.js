@@ -2,6 +2,7 @@ import { push } from '../router';
 import core from '../api/core';
 import * as a from '../store/actions/userInfo.js';
 import { updateOption } from '../store/actions/options';
+import {deleteCookie} from '../../utils/common';
 
 function chechAuthState(update) {
   if (update['@type'] === 'updateOption') {
@@ -23,6 +24,7 @@ function chechAuthState(update) {
           break;
         case 'authorizationStateWaitPhoneNumber':
           a.authorizationStateWaitPhoneNumber();
+          deleteCookie('keepMeAuth');
           push('#/auth');
           break;
         case 'authorizationStateClosed':

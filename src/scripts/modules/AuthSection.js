@@ -49,7 +49,9 @@ template.innerHTML = `
   }
 </style>
 <section class="section tc">
-  <h2></h2>
+  <div class='heading-wrapper'>
+    <h2></h2>
+  </div>
   <p></p>
   <div>
     <slot></slot>

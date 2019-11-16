@@ -10,6 +10,9 @@ import core, {
 import {
   setTemploaryPhone
 } from '../../services/store/actions/userInfo';
+import {
+  setCookie
+} from '../../utils/common';
 
 const t = trans('auth');
 const template = document.createElement('template');
@@ -30,7 +33,7 @@ template.innerHTML = `
 </style>
 <app-auth-section heading="${t.sign_in}" desc="${t.sign_in_desc}" img-src="./public/images/telegram.svg" >
   <app-chat-country-phone-code type="text" label="${t.country}"></app-chat-country-phone-code>
-  <app-input data-error-event='phone_invalid' type="tel" value='' label="${t.phone}" pattern="^(?:\(\d{3}\)|\d{3})[- ]?\d{3}[- ]?\d{4}$"></app-input>
+  <app-input data-error-event='phone_invalid' type="text" data-has-mask value='' label="${t.phone}" ></app-input>
   <app-checkbox is-checked='false' label-text='${t.checkbox_label}'></app-checkbox>
   <app-button class="hidden">${t.phone_submit}</app-button>
 </app-auth-section>
@@ -44,11 +47,12 @@ core.define(
       this.makeShadow(template);
 
       this.$submitButton = this.shadow.$('app-button');
-      this.$inputPhone = this.shadow.$('[type=tel]');
+      this.$inputPhone = this.shadow.$('[data-has-mask]');
       this.$country = this.shadow.$('app-chat-country-phone-code');
       this.$checkbox = this.shadow.$('app-checkbox');
 
       this.telephone = '';
+      this.keepAuth = false;
       this.selectedData = {};
 
       this.sendPhoneHandle = this.sendPhoneHandle.bind(this);
@@ -116,12 +120,19 @@ core.define(
       api.send({
         '@type': 'setAuthenticationPhoneNumber',
         phone_number: this.telephone,
+      }).then(() => {
+        if (this.keepAuth) {
+          setCookie('keepMeAuth', this.keepAuth, {
+            expires: 1000 * 60 * 365
+          })
+        }
       });
     }
 
     onChangeCheckboxHandle(e) {
       const { detail: { value } } = e;
       this.$checkbox.setAttribute('is-checked', value);
+      this.keepAuth = value;
     }
   }
 );

@@ -32,7 +32,7 @@ export const getChatHistoryOnScroll = e => {
   const scrollTop = target.scrollTop;
 
   if (scrollTop < 200) {
-    const lastMessage = target._shadowRoot.querySelector('app-chat-message');
+    const lastMessage = target.shadow.$('app-chat-message');
 
     if (!lastMessage || isLoadMoreMessages) {
       return;

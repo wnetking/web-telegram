@@ -14,6 +14,8 @@ import {
   setCookie
 } from '../../utils/common';
 
+const MIN_TELEPHONE_LENGTH = 8;
+
 const t = trans('auth');
 const template = document.createElement('template');
 template.innerHTML = `
@@ -94,7 +96,7 @@ core.define(
         this.telephone = String(this.$inputPhone.$input.value);
       }
 
-      if (this.telephone.length >= 13) {
+      if (this.telephone.length >= MIN_TELEPHONE_LENGTH) {
         this.$submitButton.classList.remove('hidden');
       } else {
         this.$submitButton.classList.add('hidden');

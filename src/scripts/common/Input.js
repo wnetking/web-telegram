@@ -166,14 +166,6 @@ export class Input extends HTMLElement {
       );
     }
 
-    if (this.hasAttribute("data-has-mask")) {
-      Inputmask({
-        numericInput: true,
-        greedy: false,
-        mask: "+9{*}"
-      }).mask(this.$input);
-    }
-
     this.extendConnectedCallback();
   }
 

@@ -18,3 +18,4 @@ import './modules/ChartRightSideBar/ChartRightSideBar';
 import './modules/ChatLeftSideBar/ChartLeftSideBar';
 import './App';
 import '../styles/index.scss';
+import './sw';

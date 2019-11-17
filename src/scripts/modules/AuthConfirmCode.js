@@ -52,6 +52,7 @@ core.define(
 
       core.on("change", this.onChangeInputHanlde, this.$input);
       core.on("focus", this.onChangeInputHanlde, this.$input);
+      core.on("focusin", this.inputFocus, this.$input);
       core.on("focusout", this.inputFocusOut, this.$input);
       core.on("keydown", this.onKeydownPhoneHandler, this.$input);
       core.on("paste", this.onKeydownPhoneHandler, this.$input);
@@ -60,6 +61,7 @@ core.define(
     disconnectedCallback() {
       core.off("change", this.onChangeInputHanlde, this.$input);
       core.off("focus", this.onChangeInputHanlde, this.$input);
+      core.off("focusin", this.inputFocus, this.$input);
       core.off("focusout", this.inputFocusOut, this.$input);
       core.off("keydown", this.onKeydownPhoneHandler, this.$input);
       core.off("paste", this.onPasteHandle, this.$input);

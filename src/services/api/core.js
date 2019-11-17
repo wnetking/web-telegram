@@ -19,6 +19,9 @@ class Core {
    * @memberof Core
    */
   on(eventName, handler, el = document) {
+    if (!el) {
+      return false;
+    }
     if (typeof handler === 'function') {
       el.addEventListener(eventName, handler);
     }
@@ -31,6 +34,9 @@ class Core {
    * @memberof Core
    */
   off(eventName, handler, el = document) {
+    if (!el) {
+      return false;
+    }
     if (typeof handler === 'function') {
       el.removeEventListener(eventName, handler);
     }

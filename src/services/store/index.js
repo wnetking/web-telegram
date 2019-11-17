@@ -1,12 +1,13 @@
 import { createStore, applyMiddleware } from 'redux';
 import combineReducer from './reducers';
-import { composeWithDevTools } from 'redux-devtools-extension';
+// import { composeWithDevTools } from 'redux-devtools-extension';
 import middlewares from './middleware';
 const initialState = {};
 const store = createStore(
   combineReducer,
   initialState,
-  composeWithDevTools(applyMiddleware(...middlewares))
+  applyMiddleware(...middlewares)
+  // composeWithDevTools(applyMiddleware(...middlewares))
 );
 
 const { dispatch, subscribe } = store;

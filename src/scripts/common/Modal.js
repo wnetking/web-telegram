@@ -35,7 +35,7 @@ template.innerHTML = `
   left: 50%;
   transform: translate(-50%,-50%);
   border-radius: 10px;
-  min-width: 445px;
+  max-width: 445px;
 }
 
 .title {
@@ -61,7 +61,6 @@ template.innerHTML = `
 .cancel:focus {
   color: #000;
 }
-
 </style>
 <div class='wrapper'>
   <div class='modal'>

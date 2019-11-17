@@ -1,5 +1,14 @@
 module.exports = {
   // extends: ['prettier'],
+  "parserOptions": {
+    "ecmaVersion": 7,
+    "sourceType": "module",
+    "allowImportExportEverywhere": true,
+    "ecmaFeatures": {
+      "jsx": true,
+      "experimentalObjectRestSpread": true
+    }
+  },
   rules: {
     'no-var': 'warn',
     'no-const-assign': 'warn',
@@ -29,13 +38,6 @@ module.exports = {
     'space-infix-ops': 'warn',
 
     radix: 'warn',
-    'comma-dangle': [
-      'error',
-      {
-        arrays: 'always-multiline',
-        objects: 'always-multiline'
-      }
-    ],
     indent: [
       'warn',
       2,

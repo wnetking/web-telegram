@@ -3,7 +3,7 @@ import trans from '../../../services/translates';
 
 let Cropper = null;
 const t = trans('auth');
-const cropperCssPath = '@import url("https://cdnjs.cloudflare.com/ajax/libs/cropper/4.0.0/cropper.min.css';
+const cropperCssPath = '@import url("./public/vendor/cropper.min.css")';
 const template = document.createElement('template');
 template.innerHTML = `
 <style>
@@ -48,7 +48,7 @@ template.innerHTML = `
   left: 0;
   bottom: 0;
   border-radius: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: rgba(0, 0, 0, 0.4);
   display: none;
 }
 
@@ -71,11 +71,12 @@ template.innerHTML = `
 #image{
   display: inline-block;
   width: 100%;
+  max-width: 100%;
 }
 
 #result{
+  margin: 0 45px;
   margin-bottom: 50px;
-  padding: 0 45px;
 }
 
 .ok {
@@ -274,10 +275,10 @@ core.define(
 
 
 function getRoundedCanvas(sourceCanvas) {
-  var canvas = document.createElement('canvas');
-  var context = canvas.getContext('2d');
-  var width = sourceCanvas.width;
-  var height = sourceCanvas.height;
+  const canvas = document.createElement('canvas');
+  const context = canvas.getContext('2d');
+  const width = sourceCanvas.width;
+  const height = sourceCanvas.height;
 
   canvas.width = width;
   canvas.height = height;

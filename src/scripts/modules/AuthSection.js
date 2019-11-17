@@ -110,7 +110,7 @@ core.define(
     }
 
     attributeChangedCallback(name, oldVal, newVal) {
-      if(name == 'heading' && oldVal !== newVal){
+      if (name == 'heading' && oldVal !== newVal) {
         this.$heading.innerHTML = newVal;
       }
     }

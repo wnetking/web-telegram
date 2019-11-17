@@ -3,7 +3,7 @@ import { WASM_FILE_HASH, WASM_FILE_NAME } from '../../utils/constants.js';
 import { getBrowser, getOSName } from '../../utils/common.js';
 import config from '../../configs/index.js';
 import states from '../response-states';
-import showError from '../../utils/errors.js';
+
 
 class TdLib {
   constructor() {
@@ -19,6 +19,7 @@ class TdLib {
 
     this.disableLog = false;
     this.client = null;
+    this.debug = process.env.NODE_ENV === 'development';
   }
 
   /**
@@ -59,18 +60,16 @@ class TdLib {
    */
   send(request) {
     if (!this.disableLog) {
-      // console.group();
-      // console.log('send', request);
       return this.client
         .send(request)
         .then(result => {
-          // console.log('receive result', result);
-          // console.groupEnd();
           return result;
         })
         .catch(error => {
           if (error['@type'] === 'error') {
-            showError(error.message);
+            if (this.debug) {
+              console.error(error.message);
+            }
             states(error);
           }
           throw error;

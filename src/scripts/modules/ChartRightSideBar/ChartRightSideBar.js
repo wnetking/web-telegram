@@ -13,7 +13,7 @@ template.innerHTML = `
       transform: translate(-50%, -50%);
     }
     </style>
-    <div><app-loader big></app-loader></div>
+    <div></div>
 `;
 
 window.customElements.define(

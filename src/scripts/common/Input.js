@@ -1,4 +1,4 @@
-const Inputmask = require("inputmask");
+
 const template = document.createElement("template");
 
 template.innerHTML = `
@@ -113,11 +113,13 @@ export class Input extends HTMLElement {
     }
 
     if (this.hasAttribute("data-has-mask")) {
-      Inputmask({
-        numericInput: true,
-        greedy: false,
-        mask: "+9{*}"
-      }).mask(this.$input);
+      import('inputmask').then(({ default: Inputmask }) => {
+        Inputmask({
+          numericInput: true,
+          greedy: false,
+          mask: "+9{*}"
+        }).mask(this.$input);
+      })
     }
 
     this.setErrorState();
@@ -179,9 +181,9 @@ export class Input extends HTMLElement {
     }
   }
 
-  extendConnectedCallback() {}
+  extendConnectedCallback() { }
 
-  extendDisconnectedCallback() {}
+  extendDisconnectedCallback() { }
 
   customErrorHandle(e) {
     const {

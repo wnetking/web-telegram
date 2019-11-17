@@ -48,6 +48,7 @@ template.innerHTML = `
     width: 15px;
     background-color: #e6e7ea;
     border-radius: 3px;
+    transition: all 0.2s ease-out;
   }
 
   .container:hover input ~ .checkmark {

@@ -1,5 +1,6 @@
-import { trans, api } from '../../services';
+import { trans } from '../../services';
 import core, { Element } from '../../services/api/core';
+import * as a from '../../services/store/actions/authActions';
 
 const t = trans('auth');
 const template = document.createElement('template');
@@ -48,14 +49,7 @@ template.innerHTML = `
   }
 </style>
 <div class='registration-wrapper'>
-  <div class='file-wrapper'>
-    <div class='section tc'>
-      <app-input type="file" id='set-profile-image'></app-input>
-      <div class='file-label'>
-        <app-icon icon='cameraadd_svg'></app-icon>
-      </div>
-    </div>
-  </div>
+  <app-crop-modal></app-crop-modal>
   <app-auth-section heading="${t.registration_name}" desc="${t.registration_desc}">
     <app-input data-error-event='emty_first_name' type="text" class='set-profile-name' label="${t.name}"></app-input>
     <app-input type="text" class='set-profile-lastname' label="${t.last_name}"></app-input>         
@@ -75,7 +69,7 @@ core.define(
       this.$lastname_input = this.shadow.$('.set-profile-lastname');
       this.$button = this.shadow.$('.set-profile-submit');
       this.$file_label = this.shadow.$('.file-label');
-      this.$file = this.shadow.$('[type="file"]');
+      this.$file = this.shadow.$('app-crop-modal');
 
       this.name = null;
       this.lastName = null;
@@ -94,7 +88,6 @@ core.define(
       core.on('change', this.onChangeLastName, this.$lastname_input);
       core.on('keydown', this.onKeyDownHandle, this.$lastname_input);
       core.on('click', this.onSubmitHandle, this.$button);
-      core.on('click', this.onClickLabelFile, this.$file_label);
     }
 
     disconnectedCallback() {
@@ -137,15 +130,37 @@ core.define(
     }
 
     onSubmitHandle() {
+      const fileToSend = this.$file.blopImage;
+
       if (!this.name || this.name.length < 1) {
         this.$name_input.$input.focus();
         return false;
       }
-      api.send({
-        '@type': 'registerUser',
+
+      a.registrationUser({
         first_name: this.name,
-        last_name: this.lastName
+        last_name: this.lastName,
+        file: fileToSend
       })
+
+      // ; (async (file) => {
+      //   const responce = await api.send({
+      //     '@type': 'registerUser',
+      //     first_name: this.name,
+      //     last_name: this.lastName
+      //   })
+
+      //   if (responce['@type'] === 'ok' && fileToSend) {
+      //     const responce = await api.send({
+      //       '@type': 'setProfilePhoto',
+      //       photo: {
+      //         "@type": 'inputFileBlob',
+      //         data: fileToSend,
+      //         name: 'profilePhoto'
+      //       },
+      //     })
+      //   }
+      // })().catch(e => console.error(e))
     }
   }
 )

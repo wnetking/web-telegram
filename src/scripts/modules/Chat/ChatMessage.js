@@ -41,7 +41,7 @@ core.define(
       if (message) {
         return message.text;
       } else {
-        return 'не обработаное сообщение';
+        return 'not support yet';
       }
     }
 

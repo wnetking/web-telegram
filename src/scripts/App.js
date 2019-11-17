@@ -44,19 +44,17 @@ core.define(
 
     connectedCallback() {
       this.router.init();
-      // this.checkActiveSession();
+      this.logOut();
     }
 
-    checkActiveSession() {
-      // if (getCookie('activeSession') && !getCookie('keepMeAuth')) {
-      //   api.send({
-      //     '@type': 'terminateSession',
-      //     session_id: parseInt(getCookie('activeSession'))
-      //   }).then(() => {
-      //     deleteCookie('activeSession');
-      //     push('/#/auth')
-      //   });
-      // }
+    logOut() {
+      if (getCookie('activeSession') && !getCookie('keepMeAuth')) {
+        api.send({
+          '@type': 'logOut',
+        }).then(() => {
+          deleteCookie('activeSession');
+        });
+      }
     }
   }
 );
